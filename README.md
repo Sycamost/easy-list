@@ -1,5 +1,5 @@
 # easy-list
-Makes C++ classes storing a list of either objects or n-tuples, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [transforming](#Transforming), [selecting](#Selecting) and [mapping](#Mapping).
+Makes C++ classes storing a list of either objects or n-tuples, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting) and [transforming](#Transforming).
 
 <code>object_list</code> stores a list of classes or structs of a given type.
 
@@ -34,14 +34,45 @@ Sorting
 Iterating
 ---------
 
-
-Transforming
-------------
-
+Both <code>object_list</code> and <code>tuple_list</code> can be iterated using the <code>for ( : )</code> structure.
 
 Selecting
 ---------
 
+A sub-list of <code>object_list</code> can easily be selected by predicate:
 
-Mapping
--------
+    list.select([](ObjectType obj) -> bool { return foo(obj); });
+
+or by matching a specified value:
+
+    list.select(obj)
+
+or by matching a specified value on a member, by use of a pre-processor macro:
+
+    SELECT_OBJ_LIST(list, member, value)
+   
+In addition to the above, a sub-list of a <code>tuple_list</code> can be selected by matching a value on a specified tuple index:
+
+    list.select(index, value)
+
+Transforming
+------------
+
+An <code>object_list</code> can be easily transformed into another <code>object_list</code> (possibly a different type) using the following intuitive syntax:
+
+    list.transform([](SourceType obj) -> DestType { return foo(obj); })
+
+Use of a pre-processor macro makes it easy to transform each element to a member of the source type. The following two expressions are equivalent:
+
+    TRANSFORM_OBJ_LIST(list, member)
+    list.transform([](SourceType obj) -> DestType { return obj.member; })
+    
+Also streamlined is the common operation of transforming a list of a one type into a list of another type to which the first is castable. The following two expressions are equivalent:
+
+    list.transform<DestType>()
+    list.transform([](SourceType obj) -> DestType { return (DestType)obj; })
+
+As well as the above, <code>tuple_list</code> can be transformed to a specified tuple index. The following two expressions are equivalent:
+
+    list.transform(index)
+    list.transform([](tuple t) -> auto { return t[index]; })
