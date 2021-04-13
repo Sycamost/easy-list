@@ -1,5 +1,5 @@
 # easy-list
-Makes C++ classes storing a list of either objects or n-tuples, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), iterating, transforming, selecting and mapping.
+Makes C++ classes storing a list of either objects or n-tuples, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [transforming](#Transforming), [selecting](#Selecting) and [mapping](#Mapping).
 
 <code>object_list</code> stores a list of classes or structs of a given type.
 
