@@ -10,13 +10,13 @@ Searching
 
 <code>object_list</code> can be searched for a match to a specified predicate, or a specified member (variable or method). This process is streamlined by use of a preprocessor macro. The following two expressions are equivalent:
 
-  SEARCH_OBJ_LIST(list, member, value)
-  list.search([term](ObjectType obj) -> bool { return obj.member == value; })
+    SEARCH_OBJ_LIST(list, member, value)
+    list.search([term](ObjectType obj) -> bool { return obj.member == value; })
 
 <code>tuple_list</code> can also be searched as above, but can also be easily searched for a match by tuple index. The following two expressions are equivalent:
 
-  list.search(index, value)
-  list.search([index, value](tuple t) -> bool { return t[index] == value; })
+    list.search(index, value)
+    list.search([index, value](tuple t) -> bool { return t[index] == value; })
   
 Sorting
 -------
