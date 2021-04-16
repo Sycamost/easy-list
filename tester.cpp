@@ -11,8 +11,6 @@ using namespace easylist;
 
 int main()
 {
-    object_list<int> t = object_list<int>(42);
-    t.displayData();
-    std::cout << t.getData() << std::endl;
+    object_list<int> t = object_list<int>({ 42 });
     return 0;
 }

@@ -8,48 +8,10 @@
 namespace easylist
 {
     EASYLIST_TEMPLATE_OBJ_LIST_DEFN
-    class object_list
-    {
-    private:
-        _Type data;
-
-    public:
-        object_list();
-        object_list(_Type t);
-        _Type getData() const;
-        void displayData() const;
-    };
-
-    EASYLIST_TEMPLATE_OBJ_LIST_DECL
-    object_list<_Type, _Alloc>::object_list() : data() {}
-
-    EASYLIST_TEMPLATE_OBJ_LIST_DECL
-    object_list<_Type, _Alloc>::object_list(_Type t)
-        : data(t)
-    {
-    }
-
-    EASYLIST_TEMPLATE_OBJ_LIST_DECL
-    _Type object_list<_Type, _Alloc>::getData() const
-    {
-        return data;
-    }
-
-    EASYLIST_TEMPLATE_OBJ_LIST_DECL
-    void object_list<_Type, _Alloc>::displayData() const
-    {
-        std::cout << data << std::endl;
-    }
-
-    /*
-    EASYLIST_TEMPLATE_OBJ_LIST
     class object_list : public std::vector<_Type, _Alloc>
     {
     public:
-        using namespace std;
-
-        using _Mybase = vector<_Type>;
-        using value_compare = typename _Mybase::value_compare;
+        using _Mybase = std::vector<_Type>;
         using allocator_type = typename _Mybase::allocator_type;
         using size_type = typename _Mybase::size_type;
         using difference_type = typename _Mybase::difference_type;
@@ -59,8 +21,6 @@ namespace easylist
         using const_iterator = typename _Mybase::const_iterator;
         using reverse_iterator = typename _Mybase::reverse_iterator;
         using const_reverse_iterator = typename _Mybase::const_reverse_iterator;
-        using _Alnode = typename _Mybase::_Alnode;
-        using _Alnode_traits = typename _Mybase::_Alnode_traits;
 
         object_list() : _Mybase() {}
 
@@ -81,7 +41,7 @@ namespace easylist
 
         object_list(_Mybase&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase(_Right, _Al) {}
 
-        object_list(initializer_list<_Type> _Ilist, const _Alloc& _Al = _Alloc()) : _Mybase(_Ilist, _Al) {}
+        object_list(std::initializer_list<_Type> _Ilist, const _Alloc& _Al = _Alloc()) : _Mybase(_Ilist, _Al) {}
 
         object_list(const object_list& _Right, const _Alloc& _Al = _Alloc()) : _Mybase((const _Mybase&)_Right, _Al) {}
 
@@ -89,6 +49,6 @@ namespace easylist
             return _Mybase::operator=((_Mybase&&)_Right);
         }
 
-        ~object_list() : ~_Mybase() {}
-    };*/
+        ~object_list() { }
+    };
 }
