@@ -27,6 +27,11 @@ namespace easylist
         using reverse_iterator = typename _Mybase::reverse_iterator;
         using const_reverse_iterator = typename _Mybase::const_reverse_iterator;
 
+
+        ////////////////////
+        /// CONSTRUCTORS ///
+        ////////////////////
+
         object_list() : _Mybase() {}
 
         explicit object_list(const _Alloc& _Al) : _Mybase(_Al) {}
@@ -38,10 +43,6 @@ namespace easylist
         template <class _Iter, std::enable_if_t<std::_Is_iterator_v<_Iter>, bool> = true>
         object_list(_Iter _First, _Iter _Last, const _Alloc& _Al = _Alloc()) : _Mybase(_First, _Last, _Al) {}
 
-        object_list& operator=(const object_list& _Right) {
-            return _Mybase::operator=((const _Mybase&)_Right);
-        }
-
         object_list(object_list&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase((_Mybase&&)_Right, _Al) {}
 
         object_list(_Mybase&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase(_Right, _Al) {}
@@ -50,12 +51,21 @@ namespace easylist
 
         object_list(const object_list& _Right, const _Alloc& _Al = _Alloc()) : _Mybase((const _Mybase&)_Right, _Al) {}
 
+        ~object_list() { }
+
+
+        //////////////////////////
+        /// OPERATOR OVERLOADS ///
+        //////////////////////////
+
+        object_list& operator=(const object_list& _Right) {
+            return _Mybase::operator=((const _Mybase&)_Right);
+        }
+
         object_list& operator=(object_list&& _Right) noexcept {
             _Mybase::operator=((_Mybase&&)_Right);
             return *this;
         }
-
-        ~object_list() { }
 
         template <std::enable_if_t<can_convert_string_v<_Type>, bool> = true>
         operator std::string() const
@@ -80,5 +90,6 @@ namespace easylist
             output << str;
             return output;
         }
+
     };
 }
