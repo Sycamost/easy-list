@@ -57,8 +57,6 @@ namespace easylist
 
         ~object_list() { }
 
-    public:
-
         template <std::enable_if_t<can_convert_string_v<_Type>, bool> = true>
         operator std::string() const
         {
