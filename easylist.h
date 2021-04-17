@@ -35,14 +35,14 @@ namespace easylist
 
         object_list(const size_t _Count, const _Type& _Val, const _Alloc& _Al = _Alloc()) : _Mybase(_Count, _Val, _Al) {}
 
-        template <class _Iter>
+        template <class _Iter, std::enable_if_t<std::_Is_iterator_v<_Iter>, bool> = true>
         object_list(_Iter _First, _Iter _Last, const _Alloc& _Al = _Alloc()) : _Mybase(_First, _Last, _Al) {}
 
         object_list& operator=(const object_list& _Right) {
             return _Mybase::operator=((const _Mybase&)_Right);
         }
 
-        object_list(object_list&& _Right, const _Alloc& _Al = _Alloc()) : _Mybase((_Mybase&&)_Right, _Al) {}
+        object_list(object_list&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase((_Mybase&&)_Right, _Al) {}
 
         object_list(_Mybase&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase(_Right, _Al) {}
 
@@ -50,8 +50,9 @@ namespace easylist
 
         object_list(const object_list& _Right, const _Alloc& _Al = _Alloc()) : _Mybase((const _Mybase&)_Right, _Al) {}
 
-        object_list& operator=(object_list&& _Right) {
-            return _Mybase::operator=((_Mybase&&)_Right);
+        object_list& operator=(object_list&& _Right) noexcept {
+            _Mybase::operator=((_Mybase&&)_Right);
+            return *this;
         }
 
         ~object_list() { }
@@ -61,12 +62,16 @@ namespace easylist
         template <std::enable_if_t<can_convert_string_v<_Type>, bool> = true>
         operator std::string() const
         {
+
             std::string str = "object_list<";
             str += typeid(_Type).name();
             str += ">: (";
-            for (_Type elem : *this)
-                str += convert_string(elem) + ", ";
-            str = str.substr(0, str.length() - 2);
+            if (_Mybase::size() != 0)
+            {
+                for (_Type elem : *this)
+                    str += convert_string(elem) + ", ";
+                str = str.substr(0, str.length() - 2);
+            }
             str += ")";
             return str;
         }

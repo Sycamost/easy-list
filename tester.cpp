@@ -18,18 +18,34 @@ public:
 
 int main()
 {
-    double d1 = 2.2, d2 = 2.1, d3 = 2.0;
+    int n1 = 0, n2 = 1, n3 = 2;
 
-    object_list<int> intList = object_list<int>({ 42 });
-    object_list<float> floatList = object_list<float>({ 1.2f, 1.1f, 1.0f });
-    object_list<double*> doubleStarList = object_list<double*>({ &d1, &d2, &d3 });
-    object_list<C> cList = object_list<C>({ C(3), C(5) });
-    
-    std::cout
-        << intList << std::endl
-        << floatList << std::endl
-        << doubleStarList << std::endl
-        << cList << std::endl;
+    object_list<int> listInt = object_list<int>();
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>(std::allocator<int>());
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>(3, 42);
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>({ 0, 1, 2 }, std::allocator<int>());
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>(listInt.begin(), listInt.end());
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>((object_list<int>&&)listInt);
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>((const object_list<int>&)listInt);
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>((std::vector<int>)listInt);
+    std::cout << listInt << std::endl;
+
+    listInt = object_list<int>((const std::vector<int>&)listInt);
+    std::cout << listInt << std::endl;
 
     return 0;
 }
