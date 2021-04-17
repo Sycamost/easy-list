@@ -9,7 +9,7 @@
 
 #define EASYLIST_TEMPLATE_OBJ_LIST_DEFN template<class _Type, class _Alloc = std::allocator<_Type>>
 #define EASYLIST_TEMPLATE_OBJ_LIST_DECL template<class _Type, class _Alloc>
-/*
+
 namespace easylist
 {
     EASYLIST_TEMPLATE_OBJ_LIST_DEFN
@@ -58,59 +58,17 @@ namespace easylist
 
     public:
 
-        template <
-            std::enable_if_t<std::is_convertible_v<_Type, std::string>, bool> = true
-        >
+        template <std::enable_if_t<can_convert_string_v<_Type>, bool> = true>
         operator std::string() const
         {
-            std::string str = "(";
+            std::string str = "object_list<";
+            str += typeid(_Type).name();
+            str += ">: (";
             for (_Type elem : *this)
-                str += (std::string)elem;
+                str += convert_string(elem) + ", ";
+            str = str.substr(0, str.length() - 2);
             str += ")";
             return str;
-        }
-
-        template <
-            std::enable_if_t<
-                std::conjunction_v<
-                    std::is_convertible<_Type, std::string>,
-                    std::is_convertible<_Type, char*>
-                >,
-                bool
-            > = true
-        >
-        operator std::string() const
-        {
-            std::string str = "(";
-            for (_Type elem : *this)
-                str += std::string((char*)elem);
-            str += ")";
-            return str;
-        }
-
-    public:
-
-        template <
-            std::enable_if_t<
-                std::conjunction_v<
-                    std::is_convertible<_Type, std::string>,
-                    std::is_convertible<_Type, char*>,
-                    std::is_invocable<t2str, _Type>
-                >
-            >
-        >
-        operator std::string() const
-        {
-            std::string str = "(";
-            for (_Type elem : *this)
-                str += std::to_string(_Type);
-            str += ")";
-            return str;
-        }
-
-        operator const char* () const
-        {
-            return this->operator std::string().c_str;
         }
 
         friend std::ostream& operator<<(std::ostream& output, const object_list& list)
@@ -120,4 +78,4 @@ namespace easylist
             return output;
         }
     };
-}*/
+}
