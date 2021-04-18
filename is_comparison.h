@@ -6,7 +6,7 @@ class is_comparison
 {
     template<typename __Compare, typename __Left, typename __Right>
     static auto test(int)
-        -> decltype(std::invoke(std::declval<__Compare>(), std::declval<__Left>(), std::declval<__Right>()) ? 0 : 0, std::true_type());
+        -> decltype(std::invoke(std::declval<__Compare>(), std::declval<const __Left&>(), std::declval<const __Right&>()) ? 0 : 0, std::true_type());
 
     template<typename, typename, typename>
     static auto test(...)->std::false_type;
