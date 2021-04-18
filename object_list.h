@@ -12,7 +12,7 @@
 
 namespace easylist
 {
-    EASYLIST_TEMPLATE_OBJ_LIST_DEFN
+    template<class _Type, class _Alloc = std::allocator<_Type>>
         class object_list : public std::vector<_Type, _Alloc>
     {
     public:
