@@ -16,6 +16,7 @@ public:
     operator const std::string() const { return "I am number " + std::to_string(n); }
     friend std::ostream& operator<<(std::ostream& stream, const C& c) { return stream << (std::string)(c); }
     bool operator==(const C& other) const { return n == other.n; }
+    bool operator==(const int& other) const { return n == other; }
     bool operator<(const C& rhs) const { return n < rhs.n; }
     bool operator>(const C& rhs) const { return n > rhs.n; }
 };
@@ -31,18 +32,11 @@ int main()
 
     object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
 
-    cList.sort(std::less<>{}, & C::n);
-    std::cout << cList << std::endl;
+    static_assert(std::is_invocable_r_v<int, decltype(std::declval<decltype(&C::n)>()), C>);
 
-    cList.sort(std::less<>{}, & C::getDiff, 0);
-    std::cout << cList << std::endl;
-
-    cList.sort(& C::get);
-    std::cout << cList << std::endl;
-    
-    for (auto elem : cList) {
-        std::cout << "Elem: " << elem << std::endl;
-    }
+    std::cout << cList.select<int, decltype(&C::n)>(-3, &C::n) << std::endl;
+    std::cout << cList.select(0, &C::get) << std::endl;
+    std::cout << cList.select(1, &C::getDiff, 1) << std::endl;
 
     return 0;
 }
