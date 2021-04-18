@@ -32,5 +32,8 @@
     <ClInclude Include="easylist_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="is_equatable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
