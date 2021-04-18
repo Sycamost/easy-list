@@ -32,7 +32,11 @@ int main()
 
     object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
 
-    std::cout << cList.select([](C c) -> bool { return c.n >= 0; }) << std::endl;
+    static_assert(std::is_invocable_r_v<int, decltype(std::declval<decltype(&C::n)>()), C>);
+
+    std::cout << cList.select<int, decltype(&C::n)>(-3, &C::n) << std::endl;
+    std::cout << cList.select(0, &C::get) << std::endl;
+    std::cout << cList.select(1, &C::getDiff, 1) << std::endl;
 
     return 0;
 }
