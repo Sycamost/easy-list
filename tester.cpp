@@ -25,6 +25,9 @@ bool odder(const C& c1, const C& c2) { return !(c1.n % 2) && (c2.n % 2); }
 
 bool evener(const C& c1, const C& c2) { return (c1.n % 2) && !(c2.n % 2); }
 
+C plusN(const C& c, int n) { return C(c.get() + n); }
+C plusOne(const C& c) { return plusN(c, 1); }
+
 int main()
 {
     const C c = C(1);
@@ -32,11 +35,15 @@ int main()
 
     object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
 
-    static_assert(std::is_invocable_r_v<int, decltype(std::declval<decltype(&C::n)>()), C>);
+    std::cout << cList.transform<C>(plusOne) << std::endl;
 
-    std::cout << cList.select<int, decltype(&C::n)>(-3, &C::n) << std::endl;
-    std::cout << cList.select(0, &C::get) << std::endl;
-    std::cout << cList.select(1, &C::getDiff, 1) << std::endl;
+    std::cout << cList.transform<C>(plusN, -1) << std::endl;
+
+    std::cout << cList.transform<int>(&C::n) << std::endl;
+
+    std::cout << cList.transform<int>(&C::get) << std::endl;
+
+    std::cout << cList.transform<int>(&C::getDiff, 0) << std::endl;
 
     return 0;
 }
