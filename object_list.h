@@ -197,27 +197,83 @@ namespace easylist
         }
 
 
-        ////////////////////
-        /// TRANSFORMING ///
-        ////////////////////
+        /////////////////
+        /// SELECTING ///
+        /////////////////
+
+        template <std::enable_if_t<is_equatable_self_v<_Type>, bool> = true>
+        object_list select(const _Type match)
+        {
+            object_list sublist = object_list();
+            for (_Type elem : *this)
+            {
+                if (elem == match)
+                    sublist.push_back(elem);
+            }
+            return sublist;
+        }
 
         template <
-            typename _Transformer,
-            typename... _Args,
-            typename _Result,
+            typename _MatchType,
             std::enable_if_t<
-                std::is_invocable_r_v<_Result, _Transformer, _Args...>,
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _MatchType>>,
+                    is_equatable<_Type, _MatchType>
+                >,
                 bool
             > = true
         >
-        object_list<_Result> transform(_Transformer transformer)
+        object_list select(const _MatchType match)
         {
-            object_list<_Result> result = object_list<_Result>();
+            object_list sublist = object_list();
             for (_Type elem : *this)
             {
-                result.push_back(transformer(result));
+                if (elem == match)
+                    sublist.push_back(elem);
             }
-            return result;
+            return sublist;
+        }
+
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _Predicate>>,
+                    std::negation<is_equatable<_Type, _Predicate>>,
+                    is_predicate<_Predicate, _Type>
+                >,
+                bool
+            > = true
+        >
+        object_list select(_Predicate predicate)
+        {
+            object_list sublist = object_list();
+            for (_Type elem : *this)
+            {
+                if (predicate(elem))
+                    sublist.push_back(elem);
+            }
+            return sublist;
+        }
+
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::is_invocable_r_v<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>,
+                bool
+            > = true
+        >
+        object_list select(_Result match, _Callable member, const _Args&... args)
+        {
+            object_list sublist = object_list();
+            for (_Type elem : *this)
+            {
+                if (std::invoke(member, elem, args...) == match)
+                    sublist.push_back(elem);
+            }
+            return sublist;
         }
     };
 }
