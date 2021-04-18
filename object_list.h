@@ -195,5 +195,29 @@ namespace easylist
         {
             this->sort(std::less<>{}, member, args...);
         }
+
+
+        ////////////////////
+        /// TRANSFORMING ///
+        ////////////////////
+
+        template <
+            typename _Transformer,
+            typename... _Args,
+            typename _Result,
+            std::enable_if_t<
+                std::is_invocable_r_v<_Result, _Transformer, _Args...>,
+                bool
+            > = true
+        >
+        object_list<_Result> transform(_Transformer transformer)
+        {
+            object_list<_Result> result = object_list<_Result>();
+            for (_Type elem : *this)
+            {
+                result.push_back(transformer(result));
+            }
+            return result;
+        }
     };
 }
