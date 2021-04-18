@@ -26,5 +26,17 @@
     <ClInclude Include="convstr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="object_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="easylist_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="is_equatable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="is_predicate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
