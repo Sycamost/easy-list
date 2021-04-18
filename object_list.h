@@ -275,5 +275,28 @@ namespace easylist
             }
             return sublist;
         }
+
+
+        ////////////////////
+        /// TRANSFORMING ///
+        ////////////////////
+
+        template <
+            typename _Result,
+            typename _Transformer,
+            typename... _Args,
+            std::enable_if_t<
+                std::is_invocable_r_v<_Result, _Transformer, _Type, _Args...>,
+                bool
+            > = true
+        >
+        object_list<_Result> transform(_Transformer transformer)
+        {
+            object_list<_Result> result = object_list<_Result>();
+            for (_Type elem : *this)
+                result.push_back(transformer(elem));
+            return result;
+        }
+
     };
 }
