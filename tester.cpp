@@ -2,7 +2,6 @@
 //
 
 #include <iostream>
-#include <sstream>
 #include "easylist.h"
 
 using namespace easylist;
@@ -13,39 +12,39 @@ public:
     int n;
     C(int n) { this->n = n; }
     int get() { return n; }
-    operator const std::string() const { return std::to_string(n) + " - Hello world!"; }
+    operator const std::string() const { return "I am number " + std::to_string(n); }
+    friend std::ostream& operator<<(std::ostream& stream, const C& c) { return stream << (std::string)(c); }
+    bool operator==(const C& other) const { return n == other.n; }
 };
+
+bool isC1(C c) { return c.n == 1; }
 
 int main()
 {
-    int n1 = 0, n2 = 1, n3 = 2;
+    C c = C(1);
 
-    object_list<int> listInt = object_list<int>();
-    std::cout << listInt << std::endl;
+    object_list<C> cList = object_list<C>({ c, C(2), C(3) });
+    std::cout << cList << std::endl;
 
-    listInt = object_list<int>(std::allocator<int>());
-    std::cout << listInt << std::endl;
+    auto iter = cList.search(C(1));
+    if (iter != cList.end())
+        std::cout << "A: " << *iter << std::endl;
 
-    listInt = object_list<int>(3, 42);
-    std::cout << listInt << std::endl;
+    iter = cList.search(c);
+    if (iter != cList.end())
+        std::cout << "B: " << *iter << std::endl;
 
-    listInt = object_list<int>({ 0, 1, 2 }, std::allocator<int>());
-    std::cout << listInt << std::endl;
+    iter = cList.search([](C other) -> bool { return other.n == 1; });
+    if (iter != cList.end())
+        std::cout << "C: " << *iter << std::endl;
 
-    listInt = object_list<int>(listInt.begin(), listInt.end());
-    std::cout << listInt << std::endl;
+    iter = cList.search(&isC1);
+    if (iter != cList.end())
+        std::cout << "D: " << *iter << std::endl;
 
-    listInt = object_list<int>((object_list<int>&&)listInt);
-    std::cout << listInt << std::endl;
-
-    listInt = object_list<int>((const object_list<int>&)listInt);
-    std::cout << listInt << std::endl;
-
-    listInt = object_list<int>((std::vector<int>)listInt);
-    std::cout << listInt << std::endl;
-
-    listInt = object_list<int>((const std::vector<int>&)listInt);
-    std::cout << listInt << std::endl;
+    //iter = cList.search(1);
+    if (iter != cList.end())
+        std::cout << "E: " << *iter << std::endl;
 
     return 0;
 }

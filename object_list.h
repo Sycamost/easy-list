@@ -5,7 +5,10 @@
 #include <type_traits>
 #include <sstream>
 #include <iterator>
+#include <algorithm>
 #include "easylist_util.h"
+#include "is_equatable.h"
+#include "is_predicate.h"
 
 
 namespace easylist
@@ -15,11 +18,9 @@ namespace easylist
     {
     public:
         using _Mybase = std::vector<_Type>;
+        using value_type = _Type;
         using allocator_type = typename _Mybase::allocator_type;
         using size_type = typename _Mybase::size_type;
-        using difference_type = typename _Mybase::difference_type;
-        using pointer = typename _Mybase::pointer;
-        using const_pointer = typename _Mybase::const_pointer;
 
 
 
@@ -91,9 +92,41 @@ namespace easylist
         /// SEARCHING ///
         /////////////////
 
-        void foo()
+        template <std::enable_if_t<is_equatable_self_v<_Type>, bool> = true>
+        typename _Mybase::iterator search(const _Type match)
         {
-            _Mybase::begin();
+            return std::find(this->begin(), this->end(), match);
+        }
+
+        template <
+            class _MatchType,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _MatchType>>,
+                    is_equatable<_Type, _MatchType>
+                >,
+                bool
+            > = true
+        >
+        typename _Mybase::iterator search(const _MatchType match)
+        {
+            return std::find(this->begin(), this->end(), [match](_Type other) -> bool { return other == match; });
+        }
+
+        template <
+            class _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _Predicate>>,
+                    std::negation<is_equatable<_Type, _Predicate>>,
+                    is_predicate<_Predicate, _Type>
+                >,
+                bool
+            > = true
+        >
+        typename _Mybase::iterator search(_Predicate predicate)
+        {
+            return std::find_if(this->begin(), this->end(), predicate);
         }
     };
 }
