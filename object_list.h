@@ -99,7 +99,7 @@ namespace easylist
         }
 
         template <
-            class _MatchType,
+            typename _MatchType,
             std::enable_if_t<
                 std::conjunction_v<
                     std::negation<std::is_same<_Type, _MatchType>>,
@@ -114,7 +114,7 @@ namespace easylist
         }
 
         template <
-            class _Predicate,
+            typename _Predicate,
             std::enable_if_t<
                 std::conjunction_v<
                     std::negation<std::is_same<_Type, _Predicate>>,
@@ -127,6 +127,25 @@ namespace easylist
         typename _Mybase::iterator search(_Predicate predicate)
         {
             return std::find_if(this->begin(), this->end(), predicate);
+        }
+
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::is_invocable_r_v<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>,
+                bool
+            > = true
+        >
+        typename _Mybase::iterator search(_Result match, _Callable member, const _Args&... args)
+        {
+            return std::find_if(
+                this->begin(),
+                this->end(),
+                [match, member](_Type other)
+                -> bool { return std::invoke(member, other, args...) == match; }
+            );
         }
     };
 }

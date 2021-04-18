@@ -26,25 +26,13 @@ int main()
     object_list<C> cList = object_list<C>({ c, C(2), C(3) });
     std::cout << cList << std::endl;
 
-    auto iter = cList.search(C(1));
+    auto iter = cList.search(1, &C::n);
     if (iter != cList.end())
         std::cout << "A: " << *iter << std::endl;
 
-    iter = cList.search(c);
+    iter = cList.search(1, &C::get);
     if (iter != cList.end())
         std::cout << "B: " << *iter << std::endl;
-
-    iter = cList.search([](C other) -> bool { return other.n == 1; });
-    if (iter != cList.end())
-        std::cout << "C: " << *iter << std::endl;
-
-    iter = cList.search(&isC1);
-    if (iter != cList.end())
-        std::cout << "D: " << *iter << std::endl;
-
-    //iter = cList.search(1);
-    if (iter != cList.end())
-        std::cout << "E: " << *iter << std::endl;
-
+        
     return 0;
 }
