@@ -10,6 +10,7 @@
 #include "is_equatable.h"
 #include "is_predicate.h"
 #include "is_comparison.h"
+#include "is_member_of.h"
 
 
 namespace easylist
@@ -157,12 +158,45 @@ namespace easylist
         template <typename _Compare, std::enable_if_t<is_comparison_v<_Compare, _Type>, bool> = true>
         void sort(_Compare comparer)
         {
-            std::sort(_Mybase::begin(), _Mybase::end(), cast_static_comparison<_Compare, _Type>(comparer));
+            std::sort(this->begin(), this->end(), cast_static_comparison<_Compare, _Type>(comparer));
         }
 
         void sort()
         {
             this->sort(std::less<>{});
+        }
+
+        template <
+            typename _Compare,
+            typename _Callable,
+            typename... _Args,
+            typename _Result = std::remove_reference_t<decltype(std::invoke(std::declval<_Callable>(), std::declval<_Type>(), std::declval<_Args>()...))>,
+            std::enable_if_t<
+                std::conjunction_v<
+                    is_comparison<_Compare, _Result>,
+                    is_const_member_of<_Callable, _Type, _Args...>
+                >,
+                bool
+            > = true
+        >
+        void sort(_Compare comparer, _Callable member, const _Args&... args)
+        {
+            static auto static_comparer = cast_static_comparison<_Compare, _Type>(comparer);
+            static auto pred = [comparer, member, args...](const _Type& lhs, const _Type& rhs) -> auto {
+                const _Result resultLhs = std::invoke(member, lhs, args...);
+                const _Result resultRhs = std::invoke(member, rhs, args...);
+                return static_comparer(resultLhs, resultRhs);
+            };
+            std::sort(this->begin(), this->end(), pred);
+        }
+
+        template <
+            typename _Callable,
+            typename... _Args
+        >
+        void sort(_Callable member, const _Args&... args)
+        {
+            this->sort(std::less<>{}, member, args...);
         }
     };
 }
