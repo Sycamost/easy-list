@@ -16,6 +16,7 @@ public:
     operator const std::string() const { return "I am number " + std::to_string(n); }
     friend std::ostream& operator<<(std::ostream& stream, const C& c) { return stream << (std::string)(c); }
     bool operator==(const C& other) const { return n == other.n; }
+    bool operator==(const int& other) const { return n == other; }
     bool operator<(const C& rhs) const { return n < rhs.n; }
     bool operator>(const C& rhs) const { return n > rhs.n; }
 };
@@ -31,7 +32,7 @@ int main()
 
     object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
 
-    std::cout << cList.select(C(0)) << std::endl;
+    std::cout << cList.select(0) << std::endl;
 
     return 0;
 }

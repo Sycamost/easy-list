@@ -213,5 +213,26 @@ namespace easylist
             return sublist;
         }
 
+        template <
+            typename _MatchType,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _MatchType>>,
+                    is_equatable<_Type, _MatchType>
+                >,
+                bool
+            > = true
+        >
+        object_list select(const _MatchType match)
+        {
+            object_list sublist = object_list();
+            for (auto elem : *this)
+            {
+                if (elem == match)
+                    sublist.push_back(elem);
+            }
+            return sublist;
+        }
+
     };
 }
