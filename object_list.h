@@ -9,6 +9,7 @@
 #include "easylist_util.h"
 #include "is_equatable.h"
 #include "is_predicate.h"
+#include "is_comparison.h"
 
 
 namespace easylist
@@ -146,6 +147,22 @@ namespace easylist
                 [match, member](_Type other)
                 -> bool { return std::invoke(member, other, args...) == match; }
             );
+        }
+
+
+        ///////////////
+        /// SORTING ///
+        ///////////////
+
+        template <typename _Compare, std::enable_if_t<is_comparison_v<_Compare, _Type>, bool> = true>
+        void sort(_Compare comparer)
+        {
+            std::sort(_Mybase::begin(), _Mybase::end(), cast_static_comparison<_Compare, _Type>(comparer));
+        }
+
+        void sort()
+        {
+            this->sort(std::less<>{});
         }
     };
 }

@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "easylist.h"
-#include "is_comparison.h"
 
 using namespace easylist;
 
@@ -20,7 +19,9 @@ public:
     bool operator>(const C& rhs) const { return n > rhs.n; }
 };
 
-bool isC1(C c) { return c.n == 1; }
+bool odder(const C& c1, const C& c2) { return !(c1.n % 2) && (c2.n % 2); }
+
+bool evener(const C& c1, const C& c2) { return (c1.n % 2) && !(c2.n % 2); }
 
 int main()
 {
@@ -28,8 +29,20 @@ int main()
 
     object_list<C> cList = object_list<C>({ c, C(2), C(3) });
 
-    static_assert(is_comparison_v<decltype(&C::operator<), C, C>);
-    static_assert(is_comparison_v<decltype(&C::operator>), C, C>);
+    cList.sort();
+    std::cout << cList << std::endl;
+
+    cList.sort(&C::operator>);
+    std::cout << cList << std::endl;
+
+    cList.sort(&C::operator<);
+    std::cout << cList << std::endl;
+
+    cList.sort(&odder);
+    std::cout << cList << std::endl;
+
+    cList.sort(&evener);
+    std::cout << cList << std::endl;
         
     return 0;
 }
