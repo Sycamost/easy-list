@@ -145,7 +145,6 @@
     <ClCompile Include="tester.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="convstr.h" />
     <ClInclude Include="easylist.h" />
     <ClInclude Include="easylist_util.h" />
     <ClInclude Include="object_list.h" />

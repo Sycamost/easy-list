@@ -39,6 +39,10 @@ int main()
 
     cList.sort(& C::get);
     std::cout << cList << std::endl;
-        
+    
+    for (auto elem : cList) {
+        std::cout << "Elem: " << elem << std::endl;
+    }
+
     return 0;
 }

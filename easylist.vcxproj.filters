@@ -23,9 +23,6 @@
     <ClInclude Include="easylist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="convstr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="object_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
