@@ -147,6 +147,8 @@
     <ClInclude Include="convstr.h" />
     <ClInclude Include="easylist.h" />
     <ClInclude Include="easylist_util.h" />
+    <ClInclude Include="is_comparison.h" />
+    <ClInclude Include="is_member_of.h" />
     <ClInclude Include="is_equatable.h" />
     <ClInclude Include="is_predicate.h" />
     <ClInclude Include="object_list.h" />

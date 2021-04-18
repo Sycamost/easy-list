@@ -11,28 +11,34 @@ class C
 public:
     int n;
     C(int n) { this->n = n; }
-    int get() { return n; }
+    int get() const { return n; }
+    int getDiff(int other) const { return (n > other ? n - other : other - n); }
     operator const std::string() const { return "I am number " + std::to_string(n); }
     friend std::ostream& operator<<(std::ostream& stream, const C& c) { return stream << (std::string)(c); }
     bool operator==(const C& other) const { return n == other.n; }
+    bool operator<(const C& rhs) const { return n < rhs.n; }
+    bool operator>(const C& rhs) const { return n > rhs.n; }
 };
 
-bool isC1(C c) { return c.n == 1; }
+bool odder(const C& c1, const C& c2) { return !(c1.n % 2) && (c2.n % 2); }
+
+bool evener(const C& c1, const C& c2) { return (c1.n % 2) && !(c2.n % 2); }
 
 int main()
 {
-    C c = C(1);
+    const C c = C(1);
+    c.getDiff(0);
 
-    object_list<C> cList = object_list<C>({ c, C(2), C(3) });
+    object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
+
+    cList.sort(std::less<>{}, & C::n);
     std::cout << cList << std::endl;
 
-    auto iter = cList.search(1, &C::n);
-    if (iter != cList.end())
-        std::cout << "A: " << *iter << std::endl;
+    cList.sort(std::less<>{}, & C::getDiff, 0);
+    std::cout << cList << std::endl;
 
-    iter = cList.search(1, &C::get);
-    if (iter != cList.end())
-        std::cout << "B: " << *iter << std::endl;
+    cList.sort(& C::get);
+    std::cout << cList << std::endl;
         
     return 0;
 }
