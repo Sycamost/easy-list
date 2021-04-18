@@ -6,11 +6,8 @@
 #include <sstream>
 #include <iterator>
 #include <algorithm>
+#include <template_helpers.h>
 #include "easylist_util.h"
-#include "is_equatable.h"
-#include "is_predicate.h"
-#include "is_comparison.h"
-#include "is_member_of.h"
 
 
 namespace easylist
