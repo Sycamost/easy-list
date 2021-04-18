@@ -261,8 +261,10 @@ namespace easylist
             typename _Callable,
             typename... _Args,
             std::enable_if_t<
-                std::is_invocable_r_v<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>,
-                bool
+                std::conjunction_v<
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
             > = true
         >
         object_list select(_Result match, _Callable member, const _Args&... args)
@@ -286,15 +288,39 @@ namespace easylist
             typename _Transformer,
             typename... _Args,
             std::enable_if_t<
-                std::is_invocable_r_v<_Result, _Transformer, _Type, _Args...>,
-                bool
+                std::conjunction_v<
+                    std::negation<std::is_member_pointer<_Transformer>>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Transformer>()), _Type, _Args...>
+                >, bool
             > = true
         >
-        object_list<_Result> transform(_Transformer transformer)
+        object_list<_Result> transform(_Transformer transformer, _Args... args)
         {
             object_list<_Result> result = object_list<_Result>();
             for (_Type elem : *this)
-                result.push_back(transformer(elem));
+                result.push_back(transformer(elem, args...));
+            return result;
+        }
+
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
+            > = true
+        >
+        object_list<_Result> transform(_Callable member, _Args... args)
+        {
+            static auto transformer = [member](_Type obj, _Args... args)->_Result {
+                return std::invoke(member, obj, args...);
+            };
+            object_list<_Result> result = object_list<_Result>();
+            for (_Type elem : *this)
+                result.push_back(transformer(elem, args...));
             return result;
         }
 

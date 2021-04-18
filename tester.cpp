@@ -35,7 +35,15 @@ int main()
 
     object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
 
-    std::cout << cList.transform<C, decltype(&plusOne)>(plusOne) << std::endl;
+    std::cout << cList.transform<C>(plusOne) << std::endl;
+
+    std::cout << cList.transform<C>(plusN, -1) << std::endl;
+
+    std::cout << cList.transform<int>(&C::n) << std::endl;
+
+    std::cout << cList.transform<int>(&C::get) << std::endl;
+
+    std::cout << cList.transform<int>(&C::getDiff, 0) << std::endl;
 
     return 0;
 }
