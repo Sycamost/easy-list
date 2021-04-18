@@ -15,7 +15,7 @@ Searching
 
 As are the following two expressions:
 
-    ist.search(match, &ObjectType::getValue, args...)
+    list.search(match, &ObjectType::getValue, args...)
     list.search([match, args](ObjectType obj) -> bool { return obj.getValue(args...) == match; })
 
 <code>tuple_list</code> can also be searched as above, but can also be easily searched for a match by tuple index. The following two expressions are equivalent:
