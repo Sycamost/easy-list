@@ -234,5 +234,26 @@ namespace easylist
             return sublist;
         }
 
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _Predicate>>,
+                    std::negation<is_equatable<_Type, _Predicate>>,
+                    is_predicate<_Predicate, _Type>
+                >,
+                bool
+            > = true
+        >
+        object_list select(_Predicate predicate)
+        {
+            object_list sublist = object_list();
+            for (auto elem : *this)
+            {
+                if (predicate(elem))
+                    sublist.push_back(elem);
+            }
+            return sublist;
+        }
     };
 }

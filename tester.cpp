@@ -32,7 +32,7 @@ int main()
 
     object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
 
-    std::cout << cList.select(0) << std::endl;
+    std::cout << cList.select([](C c) -> bool { return c.n >= 0; }) << std::endl;
 
     return 0;
 }
