@@ -31,18 +31,7 @@ int main()
 
     object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
 
-    cList.sort(std::less<>{}, & C::n);
-    std::cout << cList << std::endl;
-
-    cList.sort(std::less<>{}, & C::getDiff, 0);
-    std::cout << cList << std::endl;
-
-    cList.sort(& C::get);
-    std::cout << cList << std::endl;
-    
-    for (auto elem : cList) {
-        std::cout << "Elem: " << elem << std::endl;
-    }
+    std::cout << cList.select(C(0)) << std::endl;
 
     return 0;
 }

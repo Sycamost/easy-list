@@ -195,5 +195,23 @@ namespace easylist
         {
             this->sort(std::less<>{}, member, args...);
         }
+
+
+        /////////////////
+        /// SELECTING ///
+        /////////////////
+
+        template <std::enable_if_t<is_equatable_self_v<_Type>, bool> = true>
+        object_list select(const _Type match)
+        {
+            object_list sublist = object_list();
+            for (auto elem : *this)
+            {
+                if (elem == match)
+                    sublist.push_back(elem);
+            }
+            return sublist;
+        }
+
     };
 }
