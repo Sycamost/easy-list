@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "easylist.h"
+#include "is_comparison.h"
 
 using namespace easylist;
 
@@ -15,6 +16,8 @@ public:
     operator const std::string() const { return "I am number " + std::to_string(n); }
     friend std::ostream& operator<<(std::ostream& stream, const C& c) { return stream << (std::string)(c); }
     bool operator==(const C& other) const { return n == other.n; }
+    bool operator<(const C& rhs) const { return n < rhs.n; }
+    bool operator>(const C& rhs) const { return n > rhs.n; }
 };
 
 bool isC1(C c) { return c.n == 1; }
@@ -24,15 +27,9 @@ int main()
     C c = C(1);
 
     object_list<C> cList = object_list<C>({ c, C(2), C(3) });
-    std::cout << cList << std::endl;
 
-    auto iter = cList.search(1, &C::n);
-    if (iter != cList.end())
-        std::cout << "A: " << *iter << std::endl;
-
-    iter = cList.search(1, &C::get);
-    if (iter != cList.end())
-        std::cout << "B: " << *iter << std::endl;
+    static_assert(is_comparison_v<decltype(&C::operator<), C, C>);
+    static_assert(is_comparison_v<decltype(&C::operator>), C, C>);
         
     return 0;
 }
