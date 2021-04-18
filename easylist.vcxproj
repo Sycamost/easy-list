@@ -147,6 +147,7 @@
     <ClInclude Include="easylist.h" />
     <ClInclude Include="easylist_util.h" />
     <ClInclude Include="is_equatable.h" />
+    <ClInclude Include="is_predicate.h" />
     <ClInclude Include="object_list.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
