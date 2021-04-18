@@ -7,7 +7,6 @@
 #include <iterator>
 #include <algorithm>
 #include <template_helpers.h>
-#include "easylist_util.h"
 
 
 namespace easylist
