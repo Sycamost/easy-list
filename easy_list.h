@@ -54,13 +54,21 @@ namespace easy_list
         /// OPERATOR OVERLOADS ///
         //////////////////////////
 
-        list& operator=(const list& _Right) {
-            return _Mybase::operator=((const _Mybase&)_Right);
+        list& operator=(const list& rhs) {
+            return _Mybase::operator=((const _Mybase&)rhs);
         }
 
-        list& operator=(list&& _Right) noexcept {
-            _Mybase::operator=((_Mybase&&)_Right);
+        list& operator=(list&& rhs) noexcept {
+            _Mybase::operator=((_Mybase&&)rhs);
             return *this;
+        }
+
+        list operator+(const _Mybase& rhs) const {
+            return list(*this).insert(this->end(), rhs.begin(), rhs.end())
+        }
+
+        list& operator+=(const _Mybase& rhs) {
+            return this->insert(this->end(), rhs.begin(), rhs.end());
         }
 
     private:
@@ -490,7 +498,7 @@ namespace easy_list
         list unify(const _Mybase& rhs)
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : list(*this).insert(this->end(), rhs.begin(), rhs.end()))
+            for (_Type elem : *this + rhs)
             {
                 if (!list.contains(elem))
                     list.push_back(elem);
