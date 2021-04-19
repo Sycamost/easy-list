@@ -424,7 +424,7 @@ namespace easy_list
         >
         [[nodiscard]] size_t count(const _Result& match, const _Callable& member, const _Args&... args) const
         {
-            return this->select(match, callable, args...).size();
+            return this->select(match, member, args...).size();
         }
 
 
