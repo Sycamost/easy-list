@@ -88,7 +88,7 @@ namespace easy_list
         /////////////////
 
         template <std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool> = true>
-        typename _Mybase::iterator search(const _Type match)
+        [[nodiscard]] typename _Mybase::iterator search(const _Type match)
         {
             return std::find(this->begin(), this->end(), match);
         }
@@ -104,7 +104,7 @@ namespace easy_list
             >
             = true
         >
-            typename _Mybase::iterator search(const _MatchType match)
+        [[nodiscard]] typename _Mybase::iterator search(const _MatchType match)
         {
             return std::find(this->begin(), this->end(), [match](_Type other) -> bool { return other == match; });
         }
@@ -121,7 +121,7 @@ namespace easy_list
             >
             = true
         >
-        typename _Mybase::iterator search(_Predicate predicate)
+        [[nodiscard]] typename _Mybase::iterator search(_Predicate predicate)
         {
             return std::find_if(this->begin(), this->end(), predicate);
         }
@@ -136,7 +136,7 @@ namespace easy_list
             >
             = true
         >
-        typename _Mybase::iterator search(_Result match, _Callable member, const _Args&... args)
+        [[nodiscard]] typename _Mybase::iterator search(_Result match, _Callable member, const _Args&... args)
         {
             return std::find_if(
                 this->begin(),
@@ -210,7 +210,7 @@ namespace easy_list
         /////////////////
 
         template <std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool> = true>
-        list select(const _Type match)
+        [[nodiscard]] list select(const _Type match)
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -232,7 +232,7 @@ namespace easy_list
             >
             = true
         >
-        list select(const _MatchType match)
+        [[nodiscard]] list select(const _MatchType match)
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -255,7 +255,7 @@ namespace easy_list
             >
             = true
         >
-        list select(_Predicate predicate)
+        [[nodiscard]] list select(_Predicate predicate)
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -278,7 +278,7 @@ namespace easy_list
             >
             = true
         >
-        list select(_Result match, _Callable member, const _Args&... args)
+        [[nodiscard]] list select(_Result match, _Callable member, const _Args&... args)
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -307,7 +307,7 @@ namespace easy_list
             >
             = true
         >
-        list<_Result> transform(_Transformer transformer, _Args... args)
+        [[nodiscard]] list<_Result> transform(_Transformer transformer, _Args... args)
         {
             list<_Result> result = list<_Result>();
             for (_Type elem : *this)
@@ -328,7 +328,7 @@ namespace easy_list
             >
             = true
         >
-        list<_Result> transform(_Callable member, _Args... args)
+        [[nodiscard]] list<_Result> transform(_Callable member, _Args... args)
         {
             static auto transformer = [member](_Type obj, _Args... args)->_Result {
                 return std::invoke(member, obj, args...);

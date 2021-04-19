@@ -35,8 +35,7 @@ int main()
 
     list<C> cList = list<C>({ C(0), C(2), C(-3) });
 
-    cList.sort();
-    std::cout << cList << std::endl;
+    cList.search(C(0));
 
     return 0;
 }
