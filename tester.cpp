@@ -35,7 +35,8 @@ int main()
 
     list<C> cList = list<C>({ C(0), C(2), C(-3) });
 
-    cList.search(C(0));
+    std::cout << cList.sort().sort(&C::operator>) << std::endl;
+    std::cout << cList << std::endl;
 
     return 0;
 }
