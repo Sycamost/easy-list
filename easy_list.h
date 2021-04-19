@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <template_helpers.h>
 
+#if _HAS_CXX17
+
 namespace easy_list
 {
     template<class _Type, class _Alloc = std::allocator<_Type>>
@@ -354,3 +356,5 @@ namespace easy_list
 
     };
 }
+
+#endif // _HAS_CXX_17
