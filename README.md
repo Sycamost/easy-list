@@ -4,7 +4,7 @@ Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with s
 Searching
 ---------
 
-<code>list</code> can be searched for a match to a specified predicate, or a specified member (variable or method). Searching returns an iterator to the first found match, or end() if no match was found. The following two expressions are equivalent:
+<code>list</code> can be searched for a match to a specified predicate, or a specified member (variable or method). Searching returns an iterator to the first found match, or <code>end()</code> if no match was found. The following two expressions are equivalent:
 
     myList.search(match, &ObjectType::memberVariable)
     myList.search([match](ObjectType obj) -> bool { return obj.memberVariable == match; })
