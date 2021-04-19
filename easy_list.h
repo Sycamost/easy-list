@@ -357,4 +357,8 @@ namespace easy_list
     };
 }
 
+#else
+
+#error "easy_list requires C++17 or greater."
+
 #endif // _HAS_CXX_17
