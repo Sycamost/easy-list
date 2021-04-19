@@ -38,15 +38,18 @@ int main()
 
     const list<C> cList = list<C>({ C(0), C(2), C(-3) });
 
-    std::cout << cList.count(C(0)) << std::endl;
-
-    std::cout << cList.count(2) << std::endl;
-
-    std::cout << cList.count(-3, &C::n) << std::endl;
-
-    std::cout << cList.count(1, &C::getDiff, 1) << std::endl;
-
-    std::cout << cList.count([](C c) -> bool { return c.n >= 0; }) << std::endl;
+    std::cout << cList.contains(C(0)) << std::endl;
+    std::cout << cList.contains(C(1)) << std::endl;
+    std::cout << cList.contains(0) << std::endl;
+    std::cout << cList.contains(1) << std::endl;
+    std::cout << cList.contains([](C c) -> bool {return c.n < 0; }) << std::endl;
+    std::cout << cList.contains([](C c) -> bool {return c.n < -5; }) << std::endl;
+    std::cout << cList.contains(2, &C::n) << std::endl;
+    std::cout << cList.contains(1, &C::n) << std::endl;
+    std::cout << cList.contains(2, &C::get) << std::endl;
+    std::cout << cList.contains(1, &C::get) << std::endl;
+    std::cout << cList.contains(2, &C::getDiff, -1) << std::endl;
+    std::cout << cList.contains(10, &C::getDiff, 0) << std::endl;
 
     return 0;
 }
