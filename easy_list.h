@@ -495,12 +495,29 @@ namespace easy_list
         }
 
         /// Unify ///
-        list unify(const _Mybase& rhs)
+        list unify(const _Mybase rhs)
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
             for (_Type elem : *this + rhs)
             {
                 if (!list.contains(elem))
+                    list.push_back(elem);
+            }
+            return list;
+        }
+
+        /// Disjoin ///
+        list disjoin(const _Mybase rhs)
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : *this)
+            {
+                if (rhs.contains(elem))
+                    list.push_back(elem);
+            }
+            for (_Type elem : rhs)
+            {
+                if (this->contains(elem))
                     list.push_back(elem);
             }
             return list;
