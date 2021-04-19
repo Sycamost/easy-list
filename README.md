@@ -1,5 +1,5 @@
 # easy-list
-Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting) and [transforming](#Transforming). <code>list</code> publically inherits from <code>std::vector</code>, so any member functions of the latter may also be called on the former. Some vector functions have been overwritten, but the user can expect behaviour in such cases to imitate the behaviour of the original function.
+Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting), [counting](#Counting) and [transforming](#Transforming). <code>list</code> publically inherits from <code>std::vector</code>, so any member functions of the latter may also be called on the former. Some vector functions have been overwritten, but the user can expect behaviour in such cases to imitate the behaviour of the original function.
 
 Searching
 ---------
@@ -47,6 +47,11 @@ or by matching a specified value on a member:
 
     myList.select(match, &ObjectType::memberVariable)
     myList.select(match, &ObjectType::getValue, args...)
+
+Counting
+--------
+
+Counting is simply a shortcut for selecting, then finding the size of the resulting selection. In any event, <code>myList.count([*whatever*])</code> is the same as <code>myList.select([*whatever*]).size()</code>.
 
 Transforming
 ------------
