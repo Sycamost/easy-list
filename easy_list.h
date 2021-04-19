@@ -88,7 +88,7 @@ namespace easy_list
         /////////////////
 
         template <std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool> = true>
-        [[nodiscard]] typename _Mybase::iterator search(const _Type match) const
+        [[nodiscard]] typename _Mybase::iterator search(const _Type& match) const
         {
             return std::find(this->begin(), this->end(), match);
         }
@@ -104,9 +104,9 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::iterator search(const _MatchType match) const
+        [[nodiscard]] typename _Mybase::iterator search(const _MatchType& match) const
         {
-            return std::find(this->begin(), this->end(), [match](_Type other) -> bool { return other == match; });
+            return std::find(this->begin(), this->end(), [match](const _Type& other) -> bool { return other == match; });
         }
 
         template <
@@ -121,7 +121,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::iterator search(_Predicate predicate) const
+        [[nodiscard]] typename _Mybase::iterator search(const _Predicate& predicate) const
         {
             return std::find_if(this->begin(), this->end(), predicate);
         }
@@ -136,12 +136,12 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::iterator search(_Result match, _Callable member, const _Args&... args) const
+        [[nodiscard]] typename _Mybase::iterator search(const _Result& match, const _Callable& member, const _Args&... args) const
         {
             return std::find_if(
                 this->begin(),
                 this->end(),
-                [match, member](_Type other)
+                [match, member](const _Type& other)
                 -> bool { return std::invoke(member, other, args...) == match; }
             );
         }
@@ -152,7 +152,7 @@ namespace easy_list
         ///////////////
 
         template <typename _Compare, std::enable_if_t<template_helpers::is_comparison_v<_Compare, _Type>, bool> = true>
-        list& sort(_Compare comparer)
+        list& sort(const _Compare& comparer)
         {
             std::sort(
                 this->begin(),
@@ -182,7 +182,7 @@ namespace easy_list
             >
             = true
         >
-        list& sort(_Compare comparer, _Callable member, const _Args&... args)
+        list& sort(const _Compare& comparer, const _Callable& member, const _Args&... args)
         {
             inline auto static_comparer = template_helpers::cast_static_comparison<_Compare, _Type>(comparer);
             auto pred = [static_comparer, member, args...](const _Type& lhs, const _Type& rhs) -> auto {
@@ -198,7 +198,7 @@ namespace easy_list
             typename _Callable,
             typename... _Args
         >
-        list& sort(_Callable member, const _Args&... args)
+        list& sort(const _Callable& member, const _Args&... args)
         {
             this->sort(std::less<>{}, member, args...);
             return *this;
@@ -210,7 +210,7 @@ namespace easy_list
         /////////////////
 
         template <std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool> = true>
-        [[nodiscard]] list select(const _Type match) const
+        [[nodiscard]] list select(const _Type& match) const
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -232,7 +232,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list select(const _MatchType match) const
+        [[nodiscard]] list select(const _MatchType& match) const
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -255,7 +255,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list select(_Predicate predicate) const
+        [[nodiscard]] list select(const _Predicate& predicate) const
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -278,7 +278,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list select(_Result match, _Callable member, const _Args&... args) const
+        [[nodiscard]] list select(const _Result& match, const _Callable& member, const _Args&... args) const
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -307,7 +307,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list<_Result> transform(_Transformer transformer, _Args... args) const
+        [[nodiscard]] list<_Result> transform(const _Transformer& transformer, const _Args&... args) const
         {
             list<_Result> result = list<_Result>();
             for (_Type elem : *this)
@@ -328,9 +328,9 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list<_Result> transform(_Callable member, _Args... args) const
+        [[nodiscard]] list<_Result> transform(const _Callable& member, const _Args&... args) const
         {
-            static auto transformer = [member](_Type obj, _Args... args)->_Result {
+            static auto transformer = [member](const _Type& obj, const _Args&... args)->_Result {
                 return std::invoke(member, obj, args...);
             };
             list<_Result> result = list<_Result>();
