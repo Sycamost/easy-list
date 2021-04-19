@@ -298,6 +298,15 @@ namespace easy_list
         /// TRANSFORMING ///
         ////////////////////
 
+        template<class _ConvertibleType, std::enable_if_t<std::is_convertible_v<_Type, _ConvertibleType>, bool> = true>
+        [[nodiscard]] list<_ConvertibleType> transform()
+        {
+            list<_Result> result = list<_Result>();
+            for (_Type elem : *this)
+                result.push_back(static_cast<_ConvertibleType>(elem));
+            return result;
+        }
+
         template <
             typename _Result,
             typename _Transformer,
