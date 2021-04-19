@@ -60,13 +60,22 @@ namespace easy_list
             return *this;
         }
 
-        template <std::enable_if_t<template_helpers::can_convert_string_v<_Type>, bool> = true>
+    private:
+        std::string getTypeName() const
+        {
+            std::string str = "easy_list::list<";
+            str += typeid(_Type).name();
+            str += ">";
+            return str;
+        }
+
+    public:
+        template <typename = typename std::enable_if_t<template_helpers::can_convert_string<_Type>::value, bool>>
         operator std::string() const
         {
 
-            std::string str = "easy_list::list<";
-            str += typeid(_Type).name();
-            str += ">: (";
+            std::string str = getTypeName();
+            str += ": (";
             if (_Mybase::size() != 0)
             {
                 for (_Type elem : *this)
@@ -89,7 +98,7 @@ namespace easy_list
         /// SEARCHING ///
         /////////////////
 
-        template <std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool> = true>
+        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
         [[nodiscard]] typename _Mybase::const_iterator search(const _Type& match) const
         {
             return std::find(this->begin(), this->end(), match);
@@ -215,7 +224,7 @@ namespace easy_list
         /// SELECTING ///
         /////////////////
 
-        template <std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool> = true>
+        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
         [[nodiscard]] list select(const _Type& match) const
         {
             list sublist = list();
