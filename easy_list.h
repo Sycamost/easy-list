@@ -495,7 +495,7 @@ namespace easy_list
         }
 
         /// Unify ///
-        list unify(const _Mybase rhs)
+        [[nodiscard]] list unify(const _Mybase rhs) const
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
             for (_Type elem : *this + rhs)
@@ -507,7 +507,7 @@ namespace easy_list
         }
 
         /// Disjoin ///
-        list disjoin(const _Mybase rhs)
+        [[nodiscard]] list disjoin(const _Mybase rhs) const
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
             for (_Type elem : *this)
@@ -521,6 +521,12 @@ namespace easy_list
                     list.push_back(elem);
             }
             return list;
+        }
+
+        /// Shares ///
+        bool shares(const _Mybase rhs) const
+        {
+            return this->unify(rhs).size() > 0;
         }
 
     };
