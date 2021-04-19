@@ -486,6 +486,18 @@ namespace easy_list
             return result;
         }
 
+        /// Unify ///
+        list unify(const _Mybase& rhs)
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : list(*this).insert(this->end(), rhs.begin(), rhs.end()))
+            {
+                if (!list.contains(elem))
+                    list.push_back(elem);
+            }
+            return list;
+        }
+
     };
 }
 
