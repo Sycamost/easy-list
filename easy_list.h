@@ -21,8 +21,8 @@ namespace easy_list
         using allocator_type = typename _Mybase::allocator_type;
         using size_type = typename _Mybase::size_type;
 
-        _Mybase::iterator npos() { return this->end(); }
-        _Mybase::const_iterator npos() const { return this->end(); }
+        typename _Mybase::iterator npos() { return this->end(); }
+        typename _Mybase::const_iterator npos() const { return this->end(); }
 
         ////////////////////
         /// CONSTRUCTORS ///
@@ -374,13 +374,7 @@ namespace easy_list
         template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
         [[nodiscard]] size_t count(const _Type& match) const
         {
-            size_t n = 0;
-            for (_Type elem : *this)
-            {
-                if (elem == match)
-                    n++;
-            }
-            return n;
+            return this->select(match).size();
         }
 
         template <
@@ -396,13 +390,7 @@ namespace easy_list
         >
         [[nodiscard]] size_t count(const _MatchType& match) const
         {
-            size_t n = 0;
-            for (_Type elem : *this)
-            {
-                if (elem == match)
-                    n++;
-            }
-            return n;
+            return this->select(match).size();
         }
 
         template <
@@ -419,13 +407,7 @@ namespace easy_list
         >
         [[nodiscard]] size_t count(const _Predicate& predicate) const
         {
-            size_t n = 0;
-            for (_Type elem : *this)
-            {
-                if (predicate(elem))
-                    n++;
-            }
-            return n;
+            return this->select(predicate).size();
         }
 
         template <
@@ -442,13 +424,7 @@ namespace easy_list
         >
         [[nodiscard]] size_t count(const _Result& match, const _Callable& member, const _Args&... args) const
         {
-            size_t n = 0;
-            for (_Type elem : *this)
-            {
-                if (std::invoke(member, elem, args...) == match)
-                    n++;
-            }
-            return n;
+            return this->select(match, member, args...).size();
         }
 
 
