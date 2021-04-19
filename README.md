@@ -13,6 +13,11 @@ As are the following two expressions:
 
     myList.search(match, &ObjectType::getValue, args...)
     myList.search([match, args](ObjectType obj) -> bool { return obj.getValue(args...) == match; })
+
+If the user doesn't need to see the result, but just needs to know whether such an object is contained in the list at all, there is a <code>contains</code> method. The following two expressions are equivalent:
+
+    myList.contains([*whatever*])
+    (myList.search([*whatever*]) != myList.end())
   
 Sorting
 -------
