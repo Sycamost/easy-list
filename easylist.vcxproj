@@ -145,8 +145,7 @@
     <ClCompile Include="tester.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="easylist.h" />
-    <ClInclude Include="object_list.h" />
+    <ClInclude Include="easy_list.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
