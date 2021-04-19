@@ -305,6 +305,91 @@ namespace easy_list
         }
 
 
+        ////////////////
+        /// COUNTING ///
+        ////////////////
+
+        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
+        [[nodiscard]] size_t count(const _Type& match) const
+        {
+            size_t n = 0;
+            for (_Type elem : *this)
+            {
+                if (elem == match)
+                    n++;
+            }
+            return n;
+        }
+
+        template <
+            typename _MatchType,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _MatchType>>,
+                    template_helpers::is_equatable<_Type, _MatchType>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] size_t count(const _MatchType& match) const
+        {
+            size_t n = 0;
+            for (_Type elem : *this)
+            {
+                if (elem == match)
+                    n++;
+            }
+            return n;
+        }
+
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _Predicate>>,
+                    std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
+                    template_helpers::is_predicate<_Predicate, _Type>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] size_t count(const _Predicate& predicate) const
+        {
+            size_t n = 0;
+            for (_Type elem : *this)
+            {
+                if (predicate(elem))
+                    n++;
+            }
+            return n;
+        }
+
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
+            >
+            = true
+        >
+        [[nodiscard]] size_t count(const _Result& match, const _Callable& member, const _Args&... args) const
+        {
+            size_t n = 0;
+            for (_Type elem : *this)
+            {
+                if (std::invoke(member, elem, args...) == match)
+                    n++;
+            }
+            return n;
+        }
+
+
         ////////////////////
         /// TRANSFORMING ///
         ////////////////////
@@ -312,7 +397,7 @@ namespace easy_list
         template<class _ConvertibleType, std::enable_if_t<std::is_convertible_v<_Type, _ConvertibleType>, bool> = true>
         [[nodiscard]] list<_ConvertibleType> transform()
         {
-            list<_Result> result = list<_Result>();
+            auto result = list<_ConvertibleType>();
             for (_Type elem : *this)
                 result.push_back(static_cast<_ConvertibleType>(elem));
             return result;
