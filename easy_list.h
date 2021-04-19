@@ -21,6 +21,9 @@ namespace easy_list
         using allocator_type = typename _Mybase::allocator_type;
         using size_type = typename _Mybase::size_type;
 
+        _Mybase::iterator npos() { return this->end(); }
+        _Mybase::const_iterator npos() const { return this->end(); }
+
         ////////////////////
         /// CONSTRUCTORS ///
         ////////////////////
@@ -169,7 +172,7 @@ namespace easy_list
         template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
         [[nodiscard]] bool contains(const _Type& match) const
         {
-            return this->search(match) != this->end();
+            return this->search(match) != this->npos();
         }
 
         template <
@@ -185,7 +188,7 @@ namespace easy_list
         >
         [[nodiscard]] bool contains(const _MatchType& match) const
         {
-            return this->search(match) != this->end();
+            return this->search(match) != this->npos();
         }
 
         template <
@@ -202,7 +205,7 @@ namespace easy_list
         >
         [[nodiscard]] bool contains(const _Predicate& predicate) const
         {
-            return this->search(predicate) != this->end();
+            return this->search(predicate) != this->npos();
         }
 
         template <
@@ -217,7 +220,7 @@ namespace easy_list
         >
         [[nodiscard]] bool contains(const _Result& match, const _Callable& member, const _Args&... args) const
         {
-            return this->search(match, member, args...) != this->end();
+            return this->search(match, member, args...) != this->npos();
         }
 
 
