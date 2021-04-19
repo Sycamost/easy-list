@@ -1,5 +1,5 @@
 # easy-list
-Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting), [counting](#Counting) and [transforming](#Transforming). <code>list</code> publically inherits from <code>std::vector</code>, so any member functions of the latter may also be called on the former. Some vector functions have been overwritten, but the user can expect behaviour in such cases to imitate the behaviour of the original function.
+Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting), [counting](#Counting), [transforming](#Transforming) and [other stuff](#Other stuff). <code>list</code> publically inherits from <code>std::vector</code>, so any member functions of the latter may also be called on the former. Some vector functions have been overwritten, but the user can expect behaviour in such cases to imitate the behaviour of the original function.
 
 Searching
 ---------
@@ -79,3 +79,12 @@ Also streamlined is the common operation of transforming a list of a one type in
 
     myList.transform<ConvertibleType>()
     myList.transform([](ObjectType obj) -> auto { return static_cast<ConvertibleType>(obj); })
+
+Other stuff
+-----------
+
+You can create a new list from one list and a vector with <code>unify</code> (for lack of being able to use the keyword <code>union</code>), where the new list contains one of every unique element of each of the conjuncts, in the order they first appear in the left list, followed by the order they first appear in the right list.
+
+Similarly, <code>disjoin<code> concatenates two vectors, and then removes all elements which fail to be in both disjoints. (As a result, repeats are allowed in disjoins, but not in unifications.)
+
+You can concatenate two lists (or a list and a vector) with the + operator.
