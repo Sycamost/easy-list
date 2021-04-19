@@ -88,7 +88,7 @@ namespace easy_list
         /////////////////
 
         template <std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool> = true>
-        [[nodiscard]] typename _Mybase::iterator search(const _Type& match) const
+        [[nodiscard]] typename _Mybase::const_iterator search(const _Type& match) const
         {
             return std::find(this->begin(), this->end(), match);
         }
@@ -98,15 +98,19 @@ namespace easy_list
             std::enable_if_t<
                 std::conjunction_v<
                     std::negation<std::is_same<_Type, _MatchType>>,
-                    template_helpers::is_equatable<_Type, _MatchType>
+                    template_helpers::is_equatable<const _Type&, const _MatchType&>
                 >,
                 bool
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::iterator search(const _MatchType& match) const
+        [[nodiscard]] typename _Mybase::const_iterator search(const _MatchType& match) const
         {
-            return std::find(this->begin(), this->end(), [match](const _Type& other) -> bool { return other == match; });
+            return std::find_if(
+                this->begin(),
+                this->end(),
+                [match](const _Type& other) -> bool { return other == match; }
+            );
         }
 
         template <
@@ -121,7 +125,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::iterator search(const _Predicate& predicate) const
+        [[nodiscard]] typename _Mybase::const_iterator search(const _Predicate& predicate) const
         {
             return std::find_if(this->begin(), this->end(), predicate);
         }
@@ -136,12 +140,12 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::iterator search(const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] typename _Mybase::const_iterator search(const _Result& match, const _Callable& member, const _Args&... args) const
         {
             return std::find_if(
                 this->begin(),
                 this->end(),
-                [match, member](const _Type& other)
+                [match, member, args...](const _Type& other)
                 -> bool { return std::invoke(member, other, args...) == match; }
             );
         }
