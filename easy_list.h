@@ -64,11 +64,14 @@ namespace easy_list
         }
 
         list operator+(const _Mybase& rhs) const {
-            return list(*this).insert(this->end(), rhs.begin(), rhs.end());
+            list result = list(*this);
+            result.insert(this->end(), rhs.begin(), rhs.end());
+            return result;
         }
 
         list& operator+=(const _Mybase& rhs) {
-            return this->insert(this->end(), rhs.begin(), rhs.end());
+            this->insert(this->end(), rhs.begin(), rhs.end());
+            return *this;
         }
 
     private:
