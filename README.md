@@ -1,94 +1,71 @@
 # easy-list
-Makes C++ classes storing a list of either objects (classes or structs) or n-tuples, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting) and [transforming](#Transforming).
-
-<code>object_list</code> stores a list of classes or structs of a given type.
-
-<code>tuple_list</code> is a specialisation of <code>object_list<tuple></code>.
+Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting) and [transforming](#Transforming). <code>list</code> publically inherits from <code>std::vector</code>, so any member functions of the latter may also be called on the former. Some vector functions have been overwritten, but the user can expect behaviour in such cases to imitate the behaviour of the original function.
 
 Searching
 ---------
 
-<code>object_list</code> can be searched for a match to a specified predicate, or a specified member (variable or method). The following two expressions are equivalent:
+<code>list</code> can be searched for a match to a specified predicate, or a specified member (variable or method). Searching returns an iterator to the first found match, or end() if no match was found. The following two expressions are equivalent:
 
-    list.search(match, &ObjectType::memberVariable)
-    list.search([match](ObjectType obj) -> bool { return obj.memberVariable == match; })
+    myList.search(match, &ObjectType::memberVariable)
+    myList.search([match](ObjectType obj) -> bool { return obj.memberVariable == match; })
 
 As are the following two expressions:
 
-    list.search(match, &ObjectType::getValue, args...)
-    list.search([match, args](ObjectType obj) -> bool { return obj.getValue(args...) == match; })
-
-<code>tuple_list</code> can also be searched as above, but can also be easily searched for a match by tuple index. The following two expressions are equivalent:
-
-    list.search(index, value)
-    list.search([index, value](tuple t) -> bool { return t[index] == value; })
+    myList.search(match, &ObjectType::getValue, args...)
+    myList.search([match, args](ObjectType obj) -> bool { return obj.getValue(args...) == match; })
   
 Sorting
 -------
 
-<code>object_list</code> can easily be sorted with a comparison function on the whole object, or a comparison function on a specified member (variable or method). The two statements following are equivalent:
+<code>list</code> can easily be sorted with a comparison function on the whole object, or a comparison function on a specified member (variable or method). Sorting is applied to the object on which the sort was called, and also returns the result. The two statements following are equivalent:
 
-    list.sort(comp, &ObjectType::memberVariable)
-    list.sort([comp](const ObjectType& obj1, const ObjectType& obj2) -> bool { return comp(obj1.memberVariable, obj2.memberVariable); });
+    myList.sort(comp, &ObjectType::memberVariable)
+    myList.sort([comp](const ObjectType& obj1, const ObjectType& obj2) -> bool { return comp(obj1.memberVariable, obj2.memberVariable); });
 
 As are the following two:
 
-    list.sort(comp, &ObjectType::getValue, args...)
-    list.sort([comp](const ObjectType& obj1, const ObjectType& obj2) -> bool { return comp(obj1.getValue(args...), obj2.getValue(args...); });
-
-<code>tuple_list</code> can be sorted as above, and also by a comparison function on a specified tuple index. The following two statements are equivalent:
-
-    list.sort(comp, index);
-    list.sort([comp, index](const tuple& t1, const tuple& t2) -> bool { return comp(t1[index], t2[index]); });
+    myList.sort(comp, &ObjectType::getValue, args...)
+    myList.sort([comp](const ObjectType& obj1, const ObjectType& obj2) -> bool { return comp(obj1.getValue(args...), obj2.getValue(args...); });
 
 Iterating
 ---------
 
-Both <code>object_list</code> and <code>tuple_list</code> can be iterated using the <code>for ( : )</code> structure.
+<code>list</code> can be iterated using the <code>for ( : )</code> structure. It inherits this functionality from <code>std::vector</code>.
 
 Selecting
 ---------
 
-A sub-list of <code>object_list</code> can easily be selected by predicate:
+Selecting a <code>list</code> means creating a new <code>list</code> with a specified sub-class of the elements of the old <code>list</code>. Selection can be done by predicate:
 
-    list.select([](ObjectType obj) -> bool { return foo(obj); });
+    myList.select([](ObjectType obj) -> bool { return isFoo(obj); });
 
 or by matching a specified value:
 
-    list.select(obj)
+    myList.select(obj)
 
 or by matching a specified value on a member:
 
-    list.select(match, &ObjectType::memberVariable)
-    list.select(match, &ObjectType::getValue, args...)
-   
-In addition to the above, a sub-list of a <code>tuple_list</code> can be selected by matching a value on a specified tuple index:
-
-    list.select(index, value)
+    myList.select(match, &ObjectType::memberVariable)
+    myList.select(match, &ObjectType::getValue, args...)
 
 Transforming
 ------------
 
-An <code>object_list</code> can be easily transformed into another <code>object_list</code> (possibly a different type) using the following intuitive syntax:
+Transforming means turning one <code>list</code> into another, by use of a transformer: a map from each element of the old <code>list</code> to its corresponding element in the new. A <code>list</code> can be easily transformed into another <code>list</code> (possibly a different type) using the following intuitive syntax:
 
-    list.transform([](SourceType obj) -> auto { return foo(obj); })
+    myList.transform([](ObjectType obj) -> auto { return foo(obj); })
 
-One may also transform each element to a member of the source type. The following two expressions are equivalent:
+If the source type is an object type, one may also transform each element to a member of the source type. The following two expressions are equivalent:
 
-    list.transform(&SourceType::memberVariable)
-    list.transform([](SourceType obj) -> auto { return obj.memberVariable; })
+    myList.transform(&ObjectType::memberVariable)
+    myList.transform([](ObjectType obj) -> auto { return obj.memberVariable; })
 
 As are the following two:
 
-    list.transform(&SourceType::getValue, args...)
-    list.transform([](SourceType obj) -> auto { return obj.getValue(args...); })
+    myList.transform(&ObjectType::getValue, args...)
+    myList.transform([](ObjectType obj) -> auto { return obj.getValue(args...); })
     
 Also streamlined is the common operation of transforming a list of a one type into a list of another type to which the first is castable. The following two expressions are equivalent:
 
-    list.transform<DestType>()
-    list.transform([](SourceType obj) -> DestType { return static_cast<DestType>(obj); })
-
-As well as the above, <code>tuple_list</code> can be transformed to a specified tuple index. The following two expressions are equivalent:
-
-    list.transform(index)
-    list.transform([](tuple t) -> auto { return t[index]; })
+    myList.transform<ConvertibleType>()
+    myList.transform([](ObjectType obj) -> auto { return static_cast<ConvertibleType>(obj); })
