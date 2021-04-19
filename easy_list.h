@@ -162,6 +162,65 @@ namespace easy_list
         }
 
 
+        ////////////////
+        /// CONTAINS ///
+        ////////////////
+
+        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
+        [[nodiscard]] bool contains(const _Type& match) const
+        {
+            return this->search(match) != this->end();
+        }
+
+        template <
+            typename _MatchType,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _MatchType>>,
+                    template_helpers::is_equatable<const _Type&, const _MatchType&>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] bool contains(const _MatchType& match) const
+        {
+            return this->search(match) != this->end();
+        }
+
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<std::is_same<_Type, _Predicate>>,
+                    std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
+                    template_helpers::is_predicate<_Predicate, _Type>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] bool contains(const _Predicate& predicate) const
+        {
+            return this->search(predicate) != this->end();
+        }
+
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::is_invocable_r_v<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] bool contains(const _Result& match, const _Callable& member, const _Args&... args) const
+        {
+            return this->search(match, member, args...) != this->end();
+        }
+
+
         ///////////////
         /// SORTING ///
         ///////////////
