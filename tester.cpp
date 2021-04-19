@@ -2,9 +2,9 @@
 //
 
 #include <iostream>
-#include "easylist.h"
+#include "easy_list.h"
 
-using namespace easylist;
+using namespace easy_list;
 
 class C
 {
@@ -33,17 +33,10 @@ int main()
     const C c = C(1);
     c.getDiff(0);
 
-    object_list<C> cList = object_list<C>({ C(0), C(2), C(-3) });
+    list<C> cList = list<C>({ C(0), C(2), C(-3) });
 
-    std::cout << cList.transform<C>(plusOne) << std::endl;
-
-    std::cout << cList.transform<C>(plusN, -1) << std::endl;
-
-    std::cout << cList.transform<int>(&C::n) << std::endl;
-
-    std::cout << cList.transform<int>(&C::get) << std::endl;
-
-    std::cout << cList.transform<int>(&C::getDiff, 0) << std::endl;
+    cList.sort();
+    std::cout << cList << std::endl;
 
     return 0;
 }
