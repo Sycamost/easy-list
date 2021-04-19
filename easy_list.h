@@ -500,10 +500,10 @@ namespace easy_list
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
             for (_Type elem : *this + rhs)
             {
-                if (!list.contains(elem))
-                    list.push_back(elem);
+                if (!result.contains(elem))
+                    result.push_back(elem);
             }
-            return list;
+            return result;
         }
 
         /// Disjoin ///
@@ -513,14 +513,14 @@ namespace easy_list
             for (_Type elem : *this)
             {
                 if (rhs.contains(elem))
-                    list.push_back(elem);
+                    result.push_back(elem);
             }
             for (_Type elem : rhs)
             {
                 if (this->contains(elem))
-                    list.push_back(elem);
+                    result.push_back(elem);
             }
-            return list;
+            return result;
         }
 
         /// Shares ///
