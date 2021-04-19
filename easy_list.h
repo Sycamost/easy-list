@@ -182,8 +182,8 @@ namespace easy_list
         >
         void sort(_Compare comparer, _Callable member, const _Args&... args)
         {
-            static auto static_comparer = template_helpers::cast_static_comparison<_Compare, _Type>(comparer);
-            static auto pred = [comparer, member, args...](const _Type& lhs, const _Type& rhs) -> auto {
+            inline auto static_comparer = template_helpers::cast_static_comparison<_Compare, _Type>(comparer);
+            auto pred = [static_comparer, member, args...](const _Type& lhs, const _Type& rhs) -> auto {
                 const _Result resultLhs = std::invoke(member, lhs, args...);
                 const _Result resultRhs = std::invoke(member, rhs, args...);
                 return static_comparer(resultLhs, resultRhs);
