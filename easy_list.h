@@ -152,18 +152,20 @@ namespace easy_list
         ///////////////
 
         template <typename _Compare, std::enable_if_t<template_helpers::is_comparison_v<_Compare, _Type>, bool> = true>
-        void sort(_Compare comparer)
+        object_list& sort(_Compare comparer)
         {
             std::sort(
                 this->begin(),
                 this->end(),
                 template_helpers::cast_static_comparison<_Compare, _Type>(comparer)
             );
+            return *this;
         }
 
-        void sort()
+        object_list& sort()
         {
             this->sort(std::less<>{});
+            return *this;
         }
 
         template <
@@ -180,7 +182,7 @@ namespace easy_list
             >
             = true
         >
-        void sort(_Compare comparer, _Callable member, const _Args&... args)
+        object_list& sort(_Compare comparer, _Callable member, const _Args&... args)
         {
             inline auto static_comparer = template_helpers::cast_static_comparison<_Compare, _Type>(comparer);
             auto pred = [static_comparer, member, args...](const _Type& lhs, const _Type& rhs) -> auto {
@@ -189,15 +191,17 @@ namespace easy_list
                 return static_comparer(resultLhs, resultRhs);
             };
             std::sort(this->begin(), this->end(), pred);
+            return *this;
         }
 
         template <
             typename _Callable,
             typename... _Args
         >
-        void sort(_Callable member, const _Args&... args)
+        object_list& sort(_Callable member, const _Args&... args)
         {
             this->sort(std::less<>{}, member, args...);
+            return *this;
         }
 
 
