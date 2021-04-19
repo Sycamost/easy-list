@@ -14,6 +14,7 @@ public:
     int get() const { return n; }
     int getDiff(int other) const { return (n > other ? n - other : other - n); }
     operator const std::string() const { return "I am number " + std::to_string(n); }
+    operator const int() const { return n; }
     friend std::ostream& operator<<(std::ostream& stream, const C& c) { return stream << (std::string)(c); }
     bool operator==(const C other) const { return n == other.n; }
     bool operator==(const int other) const { return n == other; }
@@ -37,12 +38,15 @@ int main()
 
     const list<C> cList = list<C>({ C(0), C(2), C(-3) });
 
-    std::cout << *cList.search(2) << std::endl;
-    std::cout << *cList.search(C(0)) << std::endl;
-    std::cout << *cList.search([](C c) -> bool { return c.n >= 0; }) << std::endl;
-    std::cout << *cList.search(-3, &C::n);
-    std::cout << *cList.search(-3, &C::get);
-    std::cout << *cList.search(1, &C::getDiff, -1);
+    std::cout << cList.count(C(0)) << std::endl;
+
+    std::cout << cList.count(2) << std::endl;
+
+    std::cout << cList.count(-3, &C::n) << std::endl;
+
+    std::cout << cList.count(1, &C::getDiff, 1) << std::endl;
+
+    std::cout << cList.count([](C c) -> bool { return c.n >= 0; }) << std::endl;
 
     return 0;
 }
