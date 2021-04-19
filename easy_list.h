@@ -64,7 +64,7 @@ namespace easy_list
         }
 
         list operator+(const _Mybase& rhs) const {
-            return list(*this).insert(this->end(), rhs.begin(), rhs.end())
+            return list(*this).insert(this->end(), rhs.begin(), rhs.end());
         }
 
         list& operator+=(const _Mybase& rhs) {
