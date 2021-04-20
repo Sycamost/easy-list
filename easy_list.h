@@ -653,7 +653,6 @@ namespace easy_list
             std::enable_if_t<
                 std::conjunction_v<
                     std::is_convertible<_Replacer, _Type>,
-                    std::negation<std::is_same<_Type, _MatchType>>,
                     template_helpers::is_equatable<_Type, _MatchType>
                 >,
                 bool
@@ -686,7 +685,6 @@ namespace easy_list
             std::enable_if_t<
                 std::conjunction_v<
                     std::is_convertible<_Replacer, _Type>,
-                    std::negation<std::is_same<_Type, _Predicate>>,
                     std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
                     template_helpers::is_predicate<_Predicate, _Type>
                 >,
