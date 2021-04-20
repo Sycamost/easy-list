@@ -35,7 +35,14 @@ int main()
     const list<C> l2 = list<C>({ C(0), C(2), C(4) });
     const list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    std::cout << l1.shares(l2) << l1.shares(l3) << l2.shares(l3) << std::endl;
+    std::cout << l1.slice(0) << std::endl;
+    std::cout << l1.slice(1) << std::endl;
+    std::cout << l1.slice(2) << std::endl;
+    std::cout << l1.slice(3) << std::endl;
+    std::cout << l1.slice(1, 1) << std::endl;
+    std::cout << l1.slice(1, 2) << std::endl;
+    std::cout << l1.slice(0, 3) << std::endl;
+    std::cout << l1.slice(5, 10) << std::endl;
 
     return 0;
 }
