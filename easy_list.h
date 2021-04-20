@@ -282,6 +282,12 @@ namespace easy_list
         /// SORTING ///
         ///////////////
 
+        /// <summary>
+        /// Sorts the list with the given comparison.
+        /// </summary>
+        /// <typeparam name="_Compare">A comparison object type.</typeparam>
+        /// <param name="comparer">The comparison to sort by.</param>
+        /// <returns>This list, after having been sorted.</returns>
         template <typename _Compare, std::enable_if_t<template_helpers::is_comparison_v<_Compare, _Type>, bool> = true>
         list& sort(const _Compare& comparer)
         {
@@ -293,12 +299,25 @@ namespace easy_list
             return *this;
         }
 
+        /// <summary>
+        /// Sorts the list with the default comparison.
+        /// </summary>
+        /// <returns>This list, after having been sorted.</returns>
+        template <typename _Compare, std::enable_if_t<template_helpers::is_comparison_v<_Compare, _Type>, bool> = true>
         list& sort()
         {
             this->sort(std::less<>{});
             return *this;
         }
 
+        /// <summary>
+        /// Sorts the list with the given comparison on a specified member.
+        /// </summary>
+        /// <typeparam name="_Compare">A comparison object type on the type of the specified member variable or the return type of the member method, as applicable.</typeparam>
+        /// <param name="comparer">The comparison to sort by.</param>
+        /// <param name="member">A reference to the member variable or method to sort on, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>This list, after having been sorted.</returns>
         template <
             typename _Compare,
             typename _Callable,
@@ -325,6 +344,12 @@ namespace easy_list
             return *this;
         }
 
+        /// <summary>
+        /// Sorts the list with the default comparison on a specified member.
+        /// </summary>
+        /// <param name="member">A reference to the member variable or method to sort on, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>This list, after having been sorted.</returns>
         template <
             typename _Callable,
             typename... _Args
