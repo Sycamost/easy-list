@@ -577,7 +577,7 @@ namespace easy_list
                 bool
             > = true
         >
-        [[nodiscard]] list replace(_Replacer replacement, const _Predicate& predicate) const
+        [[nodiscard]] list replace(_Replacer replacement, const _Predicate predicate) const
         {
             list result = list();
             for (_Type elem : *this)
@@ -603,7 +603,7 @@ namespace easy_list
                 >, bool
             > = true
         >
-        [[nodiscard]] list replace(_Replacer replacement, const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] list replace(_Replacer replacement, const _Result& match, const _Callable member, const _Args&... args) const
         {
             list result = list();
             for (_Type elem : *this)
@@ -682,7 +682,7 @@ namespace easy_list
                 bool
             > = true
         >
-        [[nodiscard]] list replace(const _Transformer transformer, const _Predicate& predicate) const
+        [[nodiscard]] list replace(const _Transformer transformer, const _Predicate predicate) const
         {
             list result = list();
             for (_Type elem : *this)
@@ -709,7 +709,7 @@ namespace easy_list
                 >, bool
             > = true
         >
-        [[nodiscard]] list replace(const _Transformer transformer, const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] list replace(const _Transformer transformer, const _Result& match, const _Callable member, const _Args&... args) const
         {
             list result = list();
             for (_Type elem : *this)
