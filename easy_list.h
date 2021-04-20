@@ -497,18 +497,6 @@ namespace easy_list
             return result;
         }
 
-        /// Unify ///
-        [[nodiscard]] list unify(const _Mybase rhs) const
-        {
-            list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : *this + rhs)
-            {
-                if (!result.contains(elem))
-                    result.push_back(elem);
-            }
-            return result;
-        }
-
 
         ///////////////
         /// REPLACE ///
@@ -717,6 +705,18 @@ namespace easy_list
                 if (std::invoke(member, elem, args...) == match)
                     result.push_back(std::invoke(transformer, elem));
                 else
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        /// Unify ///
+        [[nodiscard]] list unify(const _Mybase rhs) const
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : *this + rhs)
+            {
+                if (!result.contains(elem))
                     result.push_back(elem);
             }
             return result;
