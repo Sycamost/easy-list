@@ -529,6 +529,11 @@ namespace easy_list
         /// TRANSFORMING ///
         ////////////////////
 
+        /// <summary>
+        /// Makes a new list based on this list, converting each element into the given type.
+        /// </summary>
+        /// <typeparam name="_ConvertibleType">A type to which the elements of this list are convertible.</typeparam>
+        /// <returns>The result of the transformation.</returns>
         template<class _ConvertibleType, std::enable_if_t<std::is_convertible_v<_Type, _ConvertibleType>, bool> = true>
         [[nodiscard]] list<_ConvertibleType> transform()
         {
@@ -538,6 +543,14 @@ namespace easy_list
             return result;
         }
 
+        /// <summary>
+        /// Makes a new list based on this list, converting each element to a new element by use of the given transformer.
+        /// </summary>
+        /// <typeparam name="_Result">The elements of the result of the transformation.</typeparam>
+        /// <typeparam name="_Transformer">A callable object type, which takes elements of this list as arguments and returns elements of the result of the transformation.</typeparam>
+        /// <param name="transformer">The transformation to apply to each element in this current list.</param>
+        /// <param name="...args">The arguments to supply to the transformer, if applicable.</param>
+        /// <returns>The result of the transformation.</returns>
         template <
             typename _Result,
             typename _Transformer,
@@ -559,6 +572,13 @@ namespace easy_list
             return result;
         }
 
+        /// <summary>
+        /// Makes a new list based on this list, converting each element into one of its members.
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="member">A reference to the member variable or method to transform to, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>The result of the transformation.</returns>
         template <
             typename _Result,
             typename _Callable,
