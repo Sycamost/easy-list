@@ -124,7 +124,7 @@ namespace easy_list
             return str;
         }
 
-        friend std::ostream& operator<<(std::ostream& output, const list& list)
+        friend std::ostream& operator<<(std::ostream& output, const list list)
         {
             std::string str = list;
             output << str;
@@ -175,7 +175,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::const_iterator search(const _Predicate& predicate) const
+        [[nodiscard]] typename _Mybase::const_iterator search(const _Predicate predicate) const
         {
             return std::find_if(this->begin(), this->end(), predicate);
         }
@@ -198,7 +198,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] typename _Mybase::const_iterator search(const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] typename _Mybase::const_iterator search(const _Result& match, const _Callable member, const _Args&... args) const
         {
             return std::find_if(
                 this->begin(),
@@ -249,7 +249,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] bool contains(const _Predicate& predicate) const
+        [[nodiscard]] bool contains(const _Predicate predicate) const
         {
             return this->search(predicate) != this->npos();
         }
@@ -272,7 +272,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] bool contains(const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] bool contains(const _Result& match, const _Callable member, const _Args&... args) const
         {
             return this->search(match, member, args...) != this->npos();
         }
@@ -289,7 +289,7 @@ namespace easy_list
         /// <param name="comparer">The comparison to sort by.</param>
         /// <returns>This list, after having been sorted.</returns>
         template <typename _Compare, std::enable_if_t<template_helpers::is_comparison_v<_Compare, _Type>, bool> = true>
-        list& sort(const _Compare& comparer)
+        list& sort(const _Compare comparer)
         {
             std::sort(
                 this->begin(),
@@ -332,7 +332,7 @@ namespace easy_list
             >
             = true
         >
-        list& sort(const _Compare& comparer, const _Callable& member, const _Args&... args)
+        list& sort(const _Compare comparer, const _Callable member, const _Args&... args)
         {
             inline auto static_comparer = template_helpers::cast_static_comparison<_Compare, _Type>(comparer);
             auto pred = [static_comparer, member, args...](const _Type& lhs, const _Type& rhs) -> auto {
@@ -354,7 +354,7 @@ namespace easy_list
             typename _Callable,
             typename... _Args
         >
-        list& sort(const _Callable& member, const _Args&... args)
+        list& sort(const _Callable member, const _Args&... args)
         {
             this->sort(std::less<>{}, member, args...);
             return *this;
@@ -407,7 +407,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list select(const _Predicate& predicate) const
+        [[nodiscard]] list select(const _Predicate predicate) const
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -438,7 +438,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list select(const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] list select(const _Result& match, const _Callable member, const _Args&... args) const
         {
             list sublist = list();
             for (_Type elem : *this)
@@ -494,7 +494,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] size_t count(const _Predicate& predicate) const
+        [[nodiscard]] size_t count(const _Predicate predicate) const
         {
             return this->select(predicate).size();
         }
@@ -519,7 +519,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] size_t count(const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] size_t count(const _Result& match, const _Callable member, const _Args&... args) const
         {
             return this->select(match, member, args...).size();
         }
@@ -551,7 +551,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list<_Result> transform(const _Transformer& transformer, const _Args&... args) const
+        [[nodiscard]] list<_Result> transform(const _Transformer transformer, const _Args&... args) const
         {
             list<_Result> result = list<_Result>();
             for (_Type elem : *this)
@@ -572,7 +572,7 @@ namespace easy_list
             >
             = true
         >
-        [[nodiscard]] list<_Result> transform(const _Callable& member, const _Args&... args) const
+        [[nodiscard]] list<_Result> transform(const _Callable member, const _Args&... args) const
         {
             static auto transformer = [member](const _Type& obj, const _Args&... args)->_Result {
                 return std::invoke(member, obj, args...);
@@ -580,18 +580,6 @@ namespace easy_list
             list<_Result> result = list<_Result>();
             for (_Type elem : *this)
                 result.push_back(transformer(elem, args...));
-            return result;
-        }
-
-        /// Unify ///
-        [[nodiscard]] list unify(const _Mybase rhs) const
-        {
-            list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : *this + rhs)
-            {
-                if (!result.contains(elem))
-                    result.push_back(elem);
-            }
             return result;
         }
 
@@ -663,7 +651,7 @@ namespace easy_list
                 bool
             > = true
         >
-        [[nodiscard]] list replace(_Replacer replacement, const _Predicate& predicate) const
+        [[nodiscard]] list replace(_Replacer replacement, const _Predicate predicate) const
         {
             list result = list();
             for (_Type elem : *this)
@@ -689,7 +677,7 @@ namespace easy_list
                 >, bool
             > = true
         >
-        [[nodiscard]] list replace(_Replacer replacement, const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] list replace(_Replacer replacement, const _Result& match, const _Callable member, const _Args&... args) const
         {
             list result = list();
             for (_Type elem : *this)
@@ -768,7 +756,7 @@ namespace easy_list
                 bool
             > = true
         >
-        [[nodiscard]] list replace(const _Transformer transformer, const _Predicate& predicate) const
+        [[nodiscard]] list replace(const _Transformer transformer, const _Predicate predicate) const
         {
             list result = list();
             for (_Type elem : *this)
@@ -795,7 +783,7 @@ namespace easy_list
                 >, bool
             > = true
         >
-        [[nodiscard]] list replace(const _Transformer transformer, const _Result& match, const _Callable& member, const _Args&... args) const
+        [[nodiscard]] list replace(const _Transformer transformer, const _Result& match, const _Callable member, const _Args&... args) const
         {
             list result = list();
             for (_Type elem : *this)
@@ -803,6 +791,18 @@ namespace easy_list
                 if (std::invoke(member, elem, args...) == match)
                     result.push_back(std::invoke(transformer, elem));
                 else
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        /// Unify ///
+        [[nodiscard]] list unify(const _Mybase rhs) const
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : *this + rhs)
+            {
+                if (!result.contains(elem))
                     result.push_back(elem);
             }
             return result;
