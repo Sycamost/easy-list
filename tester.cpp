@@ -31,25 +31,11 @@ C plusOne(const C& c) { return plusN(c, 1); }
 
 int main()
 {
-    const C c = C(1);
-    const C c_ = C(2);
-    c == c_;
-    c.getDiff(0);
+    const list<C> l1 = list<C>({ C(0), C(1), C(2) });
+    const list<C> l2 = list<C>({ C(0), C(2), C(4) });
+    const list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    const list<C> cList = list<C>({ C(0), C(2), C(-3) });
-
-    std::cout << cList.contains(C(0)) << std::endl;
-    std::cout << cList.contains(C(1)) << std::endl;
-    std::cout << cList.contains(0) << std::endl;
-    std::cout << cList.contains(1) << std::endl;
-    std::cout << cList.contains([](C c) -> bool {return c.n < 0; }) << std::endl;
-    std::cout << cList.contains([](C c) -> bool {return c.n < -5; }) << std::endl;
-    std::cout << cList.contains(2, &C::n) << std::endl;
-    std::cout << cList.contains(1, &C::n) << std::endl;
-    std::cout << cList.contains(2, &C::get) << std::endl;
-    std::cout << cList.contains(1, &C::get) << std::endl;
-    std::cout << cList.contains(2, &C::getDiff, -1) << std::endl;
-    std::cout << cList.contains(10, &C::getDiff, 0) << std::endl;
+    std::cout << l1.shares(l2) << l1.shares(l3) << l2.shares(l3) << std::endl;
 
     return 0;
 }

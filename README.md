@@ -87,4 +87,6 @@ You can create a new list from one list and a vector with <code>unify</code> (fo
 
 Similarly, <code>disjoin<code> concatenates two vectors, and then removes all elements which fail to be in both disjoints. (As a result, repeats are allowed in disjoins, but not in unifications.)
 
+You can check if two lists share any elements with <code>shares</code>, which is equivalent to disjoining the vectors, and checking to see if the result is non-empty.
+
 You can concatenate two lists (or a list and a vector) with the + operator.

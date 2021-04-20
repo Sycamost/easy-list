@@ -64,11 +64,14 @@ namespace easy_list
         }
 
         list operator+(const _Mybase& rhs) const {
-            return list(*this).insert(this->end(), rhs.begin(), rhs.end())
+            list result = list(*this);
+            result.insert(result.end(), rhs.begin(), rhs.end());
+            return result;
         }
 
         list& operator+=(const _Mybase& rhs) {
-            return this->insert(this->end(), rhs.begin(), rhs.end());
+            this->insert(this->end(), rhs.begin(), rhs.end());
+            return *this;
         }
 
     private:
@@ -495,32 +498,38 @@ namespace easy_list
         }
 
         /// Unify ///
-        list unify(const _Mybase rhs)
+        [[nodiscard]] list unify(const _Mybase rhs) const
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
             for (_Type elem : *this + rhs)
             {
-                if (!list.contains(elem))
-                    list.push_back(elem);
+                if (!result.contains(elem))
+                    result.push_back(elem);
             }
-            return list;
+            return result;
         }
 
         /// Disjoin ///
-        list disjoin(const _Mybase rhs)
+        [[nodiscard]] list disjoin(const _Mybase rhs) const
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
             for (_Type elem : *this)
             {
-                if (rhs.contains(elem))
-                    list.push_back(elem);
+                if (std::find(rhs.begin(), rhs.end(), elem) != rhs.end())
+                    result.push_back(elem);
             }
             for (_Type elem : rhs)
             {
                 if (this->contains(elem))
-                    list.push_back(elem);
+                    result.push_back(elem);
             }
-            return list;
+            return result;
+        }
+
+        /// Shares ///
+        bool shares(const _Mybase rhs) const
+        {
+            return this->disjoin(rhs).size() > 0;
         }
 
     };
