@@ -532,6 +532,26 @@ namespace easy_list
             return this->disjoin(rhs).size() > 0;
         }
 
+        /// Slice ///
+        list slice(const size_t start, const size_t length = -1) const
+        {
+            if (start >= this->size())
+                return list();
+            list result = list();
+            size_t actualLength = (length > this->size() - start ? this->size() - start : length);
+            result.reserve(actualLength);
+            for (size_t i = 0; i < actualLength; i++)
+                result.push_back((*this)[start + i]);
+            return result;
+        }
+
+        /// Splice ///
+        list splice(const size_t start, const size_t length = -1)
+        {
+            *this = this->slice(start, length);
+            return *this;
+        }
+
     };
 }
 
