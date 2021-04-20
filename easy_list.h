@@ -454,12 +454,12 @@ namespace easy_list
         /// COUNTING ///
         ////////////////
 
-        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
-        [[nodiscard]] size_t count(const _Type& match) const
-        {
-            return this->select(match).size();
-        }
-
+        /// <summary>
+        /// Finds the number of elements matching the specified value.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to search for.</param>
+        /// <returns>The number of elements matching the specified value.</returns>
         template <
             typename _MatchType,
             std::enable_if_t<
@@ -476,6 +476,12 @@ namespace easy_list
             return this->select(match).size();
         }
 
+        /// <summary>
+        /// Counts the number of elements satisfying the given predicate.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>The number of elements satisfying the given predicate.</returns>
         template <
             typename _Predicate,
             std::enable_if_t<
@@ -493,6 +499,14 @@ namespace easy_list
             return this->select(predicate).size();
         }
 
+        /// <summary>
+        /// Counts the number of elements matching the given value on the given member.
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to match.</param>
+        /// <param name="member">A reference to the member variable or method to match on, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>The number of elements matching the given value on the given member.</returns>
         template <
             typename _Result,
             typename _Callable,
