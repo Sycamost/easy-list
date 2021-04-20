@@ -213,19 +213,16 @@ namespace easy_list
         /// CONTAINS ///
         ////////////////
 
-        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
-        [[nodiscard]] bool contains(const _Type& match) const
-        {
-            return this->search(match) != this->npos();
-        }
-
+        /// <summary>
+        /// Checks whether the given element is contained in the list.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to search for.</param>
+        /// <returns>True if a match was found, false otherwise.</returns>
         template <
             typename _MatchType,
             std::enable_if_t<
-                std::conjunction_v<
-                    std::negation<std::is_same<_Type, _MatchType>>,
-                    template_helpers::is_equatable<const _Type&, const _MatchType&>
-                >,
+                template_helpers::is_equatable<const _Type&, const _MatchType&>,
                 bool
             >
             = true
@@ -235,11 +232,16 @@ namespace easy_list
             return this->search(match) != this->npos();
         }
 
+        /// <summary>
+        /// Checks whether any element in the list satisfies the given predicate.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>True if any element satisfies the given predicate, false otherwise.</returns>
         template <
             typename _Predicate,
             std::enable_if_t<
                 std::conjunction_v<
-                    std::negation<std::is_same<_Type, _Predicate>>,
                     std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
                     template_helpers::is_predicate<_Predicate, _Type>
                 >,
@@ -252,6 +254,14 @@ namespace easy_list
             return this->search(predicate) != this->npos();
         }
 
+        /// <summary>
+        /// Checks whether any element in the list has the given member returning a match to the given value.
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to check against.</param>
+        /// <param name="member">A reference to the member variable or method to check, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>True if any element in the list returned the given value on the given member, false otherwise.</returns>
         template <
             typename _Result,
             typename _Callable,
