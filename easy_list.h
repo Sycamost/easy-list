@@ -12,6 +12,11 @@
 
 namespace easy_list
 {
+    /// <summary>
+    /// An ordered list with better built-in functionality than ordinary vectors.
+    /// </summary>
+    /// <typeparam name="_Type">The type of the elements of the list</typeparam>
+    /// <typeparam name="_Alloc">The element allocator</typeparam>
     template<class _Type, class _Alloc = std::allocator<_Type>>
     class list : public std::vector<_Type, _Alloc>
     {
@@ -21,7 +26,16 @@ namespace easy_list
         using allocator_type = typename _Mybase::allocator_type;
         using size_type = typename _Mybase::size_type;
 
+        /// <summary>
+        /// Search operations return this if no match was found.
+        /// </summary>
+        /// <returns>An iterator object representing "no match found".</returns>
         typename _Mybase::iterator npos() { return this->end(); }
+
+        /// <summary>
+        /// Const search operations return this if no match was found.
+        /// </summary>
+        /// <returns>An iterator object representing "no match found".</returns>
         typename _Mybase::const_iterator npos() const { return this->end(); }
 
         ////////////////////
@@ -63,12 +77,22 @@ namespace easy_list
             return *this;
         }
 
+        /// <summary>
+        /// Concatenates two lists, or a list and a vector.
+        /// </summary>
+        /// <param name="rhs">The other vector to concatenate.</param>
+        /// <returns>The concatenated list.</returns>
         list operator+(const _Mybase& rhs) const {
             list result = list(*this);
             result.insert(result.end(), rhs.begin(), rhs.end());
             return result;
         }
 
+        /// <summary>
+        /// Appends (concatenates) a list or vector on the end of the current list.
+        /// </summary>
+        /// <param name="rhs">The vector to append.</param>
+        /// <returns>The list, after the append operation.</returns>
         list& operator+=(const _Mybase& rhs) {
             this->insert(this->end(), rhs.begin(), rhs.end());
             return *this;
@@ -112,22 +136,18 @@ namespace easy_list
         /// SEARCHING ///
         /////////////////
 
-        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
-        [[nodiscard]] typename _Mybase::const_iterator search(const _Type& match) const
-        {
-            return std::find(this->begin(), this->end(), match);
-        }
-
+        /// <summary>
+        /// Searches for an exact match.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to search for.</param>
+        /// <returns>A const iterator to the first element found equal to the provided match.</returns>
         template <
             typename _MatchType,
             std::enable_if_t<
-                std::conjunction_v<
-                    std::negation<std::is_same<_Type, _MatchType>>,
-                    template_helpers::is_equatable<const _Type&, const _MatchType&>
-                >,
+                template_helpers::is_equatable_v<const _Type&, const _MatchType&>,
                 bool
-            >
-            = true
+            > = true
         >
         [[nodiscard]] typename _Mybase::const_iterator search(const _MatchType& match) const
         {
@@ -137,12 +157,17 @@ namespace easy_list
                 [match](const _Type& other) -> bool { return other == match; }
             );
         }
-
+        
+        /// <summary>
+        /// Searches for an element satisfying the given predicate.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>A const iterator to the first element found to satisfy the given predicate.</returns>
         template <
             typename _Predicate,
             std::enable_if_t<
                 std::conjunction_v<
-                    std::negation<std::is_same<_Type, _Predicate>>,
                     std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
                     template_helpers::is_predicate<_Predicate, _Type>
                 >,
@@ -154,7 +179,15 @@ namespace easy_list
         {
             return std::find_if(this->begin(), this->end(), predicate);
         }
-
+        
+        /// <summary>
+        /// Searches for an element with a member matching the given value.
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to check against.</param>
+        /// <param name="member">A reference to the member variable or method to check, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>A const iterator to the first element found, such that the given member variable or method returned the match provided.</returns>
         template <
             typename _Result,
             typename _Callable,
