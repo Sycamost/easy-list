@@ -148,11 +148,18 @@ namespace easy_list
             return str;
         }
 
-        friend std::ostream& operator<<(std::ostream& output, const list list)
+        friend std::ostream& operator<<(std::ostream& stream, const list list)
         {
             std::string str = list;
-            output << str;
-            return output;
+            stream << str;
+            return stream;
+        }
+
+        friend std::wostream& operator<<(std::wostream& stream, const list list)
+        {
+            std::wstring wstr = list;
+            stream << wstr;
+            return stream;
         }
 
 

@@ -40,7 +40,7 @@ int main()
     const list<C> l2 = list<C>({ C(0), C(2), C(4) });
     const list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    std::wcout << (std::wstring)l1 << std::endl;
+    std::wcout << l1 << std::endl;
 
     return 0;
 }
