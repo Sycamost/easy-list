@@ -65,7 +65,7 @@ namespace easy_list
 
         list operator+(const _Mybase& rhs) const {
             list result = list(*this);
-            result.insert(this->end(), rhs.begin(), rhs.end());
+            result.insert(result.end(), rhs.begin(), rhs.end());
             return result;
         }
 
@@ -515,7 +515,7 @@ namespace easy_list
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
             for (_Type elem : *this)
             {
-                if (rhs.contains(elem))
+                if (std::find(rhs.begin(), rhs.end(), elem) != rhs.end())
                     result.push_back(elem);
             }
             for (_Type elem : rhs)
