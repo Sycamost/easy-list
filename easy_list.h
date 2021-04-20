@@ -6,6 +6,8 @@
 #include <sstream>
 #include <iterator>
 #include <algorithm>
+#include <time.h>
+#include <random>
 #include <template_helpers.h>
 
 #if _HAS_CXX17
@@ -917,9 +919,19 @@ namespace easy_list
         /// <param name="start">The element to start at.</param>
         /// <param name="length">The length of the string (unless it goes beyond the end of this list, in which case we only go to the end of this list).</param>
         /// <returns>This list after splicing.</returns>
-        list splice(const size_t start, const size_t length = -1)
+        list& splice(const size_t start, const size_t length = -1)
         {
             *this = this->slice(start, length);
+            return *this;
+        }
+
+        /// <summary>
+        /// Randomises the order of elements in this list.
+        /// </summary>
+        /// <returns>This list, after the shuffle.</returns>
+        list& shuffle()
+        {
+            std::shuffle(this->begin(), this->end(), std::default_random_engine((unsigned int)time(NULL)));
             return *this;
         }
 

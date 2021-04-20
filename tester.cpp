@@ -38,9 +38,13 @@ int main()
 {
     const list<C> l1 = list<C>({ C(0), C(1), C(2) });
     const list<C> l2 = list<C>({ C(0), C(2), C(4) });
-    const list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
+    list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    std::wcout << l1 << std::endl;
+    std::wcout << l3.shuffle() << std::endl;
+    std::wcout << l3.shuffle() << std::endl;
+    std::wcout << l3.shuffle() << std::endl;
+    std::wcout << l3.shuffle() << std::endl;
+    std::wcout << l3.shuffle() << std::endl;
 
     return 0;
 }
