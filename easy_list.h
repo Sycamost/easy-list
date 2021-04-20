@@ -608,31 +608,14 @@ namespace easy_list
         /// REPLACE ///
         ///////////////
 
-        /// With simple replacement (substitution) ///
-
-        template <
-            typename _Replacer,
-            std::enable_if_t<
-                std::conjunction_v<
-                    std::is_convertible<_Replacer, _Type>,
-                    template_helpers::is_equatable_self<_Type>
-                >,
-                bool
-            > = true
-        >
-        [[nodiscard]] list replace(_Replacer replacement, const _Type& match) const
-        {
-            list result = list();
-            for (_Type elem : *this)
-            {
-                if (elem == match)
-                    result.push_back(replacement);
-                else
-                    result.push_back(elem);
-            }
-            return result;
-        }
-
+        /// <summary>
+        /// Makes a new list from this one by replacing each match found with the given replacement value.
+        /// </summary>
+        /// <typeparam name="_Replacer">A type convertible to the elements of this list.</typeparam>
+        /// <typeparam name="_MatchType">A type equatable to elements of this list.</typeparam>
+        /// <param name="replacement">The value with which to replace the matched elements.</param>
+        /// <param name="match">The value to match.</param>
+        /// <returns>The result of the replacement.</returns>
         template <
             typename _Replacer,
             typename _MatchType,
@@ -658,6 +641,14 @@ namespace easy_list
             return result;
         }
 
+        /// <summary>
+        /// Makes a new list from this one by replacing each element satisfying the given predicate with the given replacement value.
+        /// </summary>
+        /// <typeparam name="_Replacer">A type convertible to the elements of this list.</typeparam>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="replacement">The value with which to replace the matched elements.</param>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>The result of the replacement.</returns>
         template <
             typename _Replacer,
             typename _Predicate,
@@ -684,6 +675,16 @@ namespace easy_list
             return result;
         }
 
+        /// <summary>
+        /// Makes a new list from this one by replacing each element matching the specified value on the specified member with the specified value.
+        /// </summary>
+        /// <typeparam name="_Replacer">A type convertible to the elements of this list.</typeparam>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="replacement">The value with which to replace the matched elements.</param>
+        /// <param name="match">The value to match.</param>
+        /// <param name="member">A reference to the member variable or method to match on, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>The result of the replacement.</returns>
         template <
             typename _Replacer,
             typename _Result,
@@ -712,30 +713,14 @@ namespace easy_list
 
         /// With transformer ///
 
-        template <
-            typename _Transformer,
-            std::enable_if_t<
-                std::conjunction_v<
-                    std::negation<std::is_convertible<_Transformer, _Type>>,
-                    std::is_invocable_r<_Type, decltype(std::declval<_Transformer>()), _Type>,
-                    template_helpers::is_equatable_self<_Type>
-                >,
-                bool
-            > = true
-        >
-        [[nodiscard]] list replace(const _Transformer transformer, const _Type& match) const
-        {
-            list result = list();
-            for (_Type elem : *this)
-            {
-                if (elem == match)
-                    result.push_back(std::invoke(transformer, elem));
-                else
-                    result.push_back(elem);
-            }
-            return result;
-        }
-
+        /// <summary>
+        /// Makes a new list from this one by transforming each match found.
+        /// </summary>
+        /// <typeparam name="_Transformer">A callable object, taking elements of this list as its sole argument and returning another object of the same type.</typeparam>
+        /// <typeparam name="_MatchType">A type equatable to elements of this list.</typeparam>
+        /// <param name="transformer">The transformation to apply to each matched element.</param>
+        /// <param name="match">The value to match.</param>
+        /// <returns>The result of the replacement.</returns>
         template <
             typename _Transformer,
             typename _MatchType,
@@ -743,7 +728,6 @@ namespace easy_list
                 std::conjunction_v<
                     std::negation<std::is_convertible<_Transformer, _Type>>,
                     std::is_invocable_r<_Type, decltype(std::declval<_Transformer>()), _Type>,
-                    std::negation<std::is_same<_Type, _MatchType>>,
                     template_helpers::is_equatable<_Type, _MatchType>
                 >,
                 bool
@@ -762,6 +746,14 @@ namespace easy_list
             return result;
         }
 
+        /// <summary>
+        /// Makes a new list from this one by transforming each element satisfying the given predicate.
+        /// </summary>
+        /// <typeparam name="_Transformer">A callable object, taking elements of this list as its sole argument and returning another object of the same type.</typeparam>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="transformer">The transformation to apply to each matched element.</param>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>The result of the replacement.</returns>
         template <
             typename _Transformer,
             typename _Predicate,
@@ -769,7 +761,6 @@ namespace easy_list
                 std::conjunction_v<
                     std::negation<std::is_convertible<_Transformer, _Type>>,
                     std::is_invocable_r<_Type, decltype(std::declval<_Transformer>()), _Type>,
-                    std::negation<std::is_same<_Type, _Predicate>>,
                     std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
                     template_helpers::is_predicate<_Predicate, _Type>
                 >,
@@ -789,6 +780,16 @@ namespace easy_list
             return result;
         }
 
+        /// <summary>
+        /// Makes a new list from this one by transforming each element matching the specified value on the specified member.
+        /// </summary>
+        /// <typeparam name="_Transformer">A callable object, taking elements of this list as its sole argument and returning another object of the same type.</typeparam>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="transformer">The transformation to apply to each matched element.</param>
+        /// <param name="match">The value to match.</param>
+        /// <param name="member">A reference to the member variable or method to match on, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>The result of the replacement.</returns>
         template <
             typename _Transformer,
             typename _Result,
