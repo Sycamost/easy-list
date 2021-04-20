@@ -39,12 +39,9 @@ int main()
     const list<C> l2 = list<C>({ C(0), C(2), C(4) });
     const list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    std::cout << l1.replace(&plusOne, C(0)) << std::endl;
-    std::cout << l1.replace(&plusOne, 1) << std::endl;
-    std::cout << l1.replace(&plusOne, 2, &C::n) << std::endl;
-    std::cout << l2.replace(&plusOne, 0, &C::get) << std::endl;
-    std::cout << l2.replace(&plusOne, 2, &C::getDiff, 2) << std::endl;
-    std::cout << l1.replace(&plusOne, &isEven) << std::endl;
+    std::cout << l1.unify(l2) << std::endl;
+    std::cout << l2.unify(l1) << std::endl;
+    std::cout << l1.disjoin(l2) << std::endl;
 
     return 0;
 }

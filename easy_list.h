@@ -817,7 +817,16 @@ namespace easy_list
             return result;
         }
 
-        /// Unify ///
+
+        ///////////////////////
+        /// UNIFY & DISJOIN ///
+        ///////////////////////
+
+        /// <summary>
+        /// Makes a new list from the union of the elements of this list with the list or vector provided.
+        /// </summary>
+        /// <param name="rhs">The list or vector to unify with this one.</param>
+        /// <returns>A list containing one instance of every element occurring at least once in either list, in the order in which they first occur in the right-hand side, followed by the order in which they first occur in this list.</returns>
         [[nodiscard]] list unify(const _Mybase rhs) const
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
@@ -829,18 +838,17 @@ namespace easy_list
             return result;
         }
 
-        /// Disjoin ///
+        /// <summary>
+        /// Makes a new list from the disjoint of the elements of this list with the list or vector provided.
+        /// </summary>
+        /// <param name="rhs">The list or vector to disjoin with this one.</param>
+        /// <returns>A list containing one instance of every element occurring at least once in both lists, in the order in which they first occur in the right-hand side.</returns>
         [[nodiscard]] list disjoin(const _Mybase rhs) const
         {
             list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : *this)
-            {
-                if (std::find(rhs.begin(), rhs.end(), elem) != rhs.end())
-                    result.push_back(elem);
-            }
             for (_Type elem : rhs)
             {
-                if (this->contains(elem))
+                if (!result.contains(elem) && this->contains(elem))
                     result.push_back(elem);
             }
             return result;
