@@ -14,6 +14,7 @@ public:
     int get() const { return n; }
     int getDiff(int other) const { return (n > other ? n - other : other - n); }
     operator const std::string() const { return "I am number " + std::to_string(n); }
+    operator const std::wstring() const { return L"I am number " + std::to_wstring(n); }
     operator const int() const { return n; }
     friend std::ostream& operator<<(std::ostream& stream, const C& c) { return stream << (std::string)(c); }
     bool operator==(const C other) const { return n == other.n; }
@@ -39,9 +40,7 @@ int main()
     const list<C> l2 = list<C>({ C(0), C(2), C(4) });
     const list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    std::cout << l1.unify(l2) << std::endl;
-    std::cout << l2.unify(l1) << std::endl;
-    std::cout << l1.disjoin(l2) << std::endl;
+    std::wcout << (std::wstring)l1 << std::endl;
 
     return 0;
 }

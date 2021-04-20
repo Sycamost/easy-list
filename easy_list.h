@@ -120,7 +120,6 @@ namespace easy_list
         template <typename = typename std::enable_if_t<template_helpers::can_convert_string<_Type>::value, bool>>
         operator std::string() const
         {
-
             std::string str = getTypeName();
             str += ": (";
             if (_Mybase::size() != 0)
@@ -130,6 +129,22 @@ namespace easy_list
                 str = str.substr(0, str.length() - 2);
             }
             str += ")";
+            return str;
+        }
+
+        template <typename = typename std::enable_if_t<template_helpers::can_convert_wstring<_Type>::value, bool>>
+        operator std::wstring() const
+        {
+            std::string typeName = getTypeName();
+            std::wstring str = std::wstring(typeName.begin(), typeName.end());
+            str += L": (";
+            if (_Mybase::size() != 0)
+            {
+                for (_Type elem : *this)
+                    str += template_helpers::convert_wstring(elem) + L", ";
+                str = str.substr(0, str.length() - 2);
+            }
+            str += L")";
             return str;
         }
 
