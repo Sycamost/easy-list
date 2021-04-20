@@ -854,13 +854,22 @@ namespace easy_list
             return result;
         }
 
-        /// Shares ///
+        /// <summary>
+        /// Checks whether the two lists share any elements.
+        /// </summary>
+        /// <param name="rhs">The other list or vector.</param>
+        /// <returns>True if any element was contained in both, false otherwise.</returns>
         bool shares(const _Mybase rhs) const
         {
             return this->disjoin(rhs).size() > 0;
         }
 
-        /// Slice ///
+        /// <summary>
+        /// Makes a new list from a sub-string of elements of this one.
+        /// </summary>
+        /// <param name="start">The element to start at.</param>
+        /// <param name="length">The length of the string (unless it goes beyond the end of this list, in which case we only go to the end of this list).</param>
+        /// <returns>The result of the slice.</returns>
         list slice(const size_t start, const size_t length = -1) const
         {
             if (start >= this->size())
@@ -873,7 +882,12 @@ namespace easy_list
             return result;
         }
 
-        /// Splice ///
+        /// <summary>
+        /// Assigns to this list a sub-list formed of a sub-string of elements of the current list.
+        /// </summary>
+        /// <param name="start">The element to start at.</param>
+        /// <param name="length">The length of the string (unless it goes beyond the end of this list, in which case we only go to the end of this list).</param>
+        /// <returns>This list after splicing.</returns>
         list splice(const size_t start, const size_t length = -1)
         {
             *this = this->slice(start, length);
