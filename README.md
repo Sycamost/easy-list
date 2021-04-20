@@ -1,5 +1,16 @@
 # easy-list
-Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with streamlined functionality for [searching](#Searching), [sorting](#Sorting), [iterating](#Iterating), [selecting](#Selecting), [counting](#Counting), [transforming](#Transforming), [slicing and splicing](#Slicing) and [other stuff](#Miscellany). <code>list</code> publically inherits from <code>std::vector</code>, so any member functions of the latter may also be called on the former. Some vector functions have been overwritten, but the user can expect behaviour in such cases to imitate the behaviour of the original function.
+Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with streamlined functionality for
+
+* [searching](#Searching),
+* [sorting](#Sorting),
+* [iterating](#Iterating),
+* [selecting](#Selecting),
+* [counting](#Counting),
+* [transforming](#Transforming),
+* [slicing and splicing](#Slicing),
+* [replacing](#Replacing)
+
+and [other stuff](#Miscellany). <code>list</code> publically inherits from <code>std::vector</code>, so any member functions of the latter may also be called on the former. Some vector functions have been overwritten, but the user can expect behaviour in such cases to imitate the behaviour of the original function.
 
 Searching
 ---------
@@ -88,6 +99,11 @@ Lists can be sliced. This means selecting a specified sub-string of elements fro
     myList.slice(start, length)
    
 Where <code>start</code> is a <code>size_t</code> representing the first index of the sub-string and <code>length</code> is the length of the sub-string. To also assign the result to the list on which it was called, use <code>splice</code>.
+
+Replacing
+---------
+
+Lists can be replaced, meaning selected elements can be interchanged with specified replacements. Finding the elements to replace can be done by simple match, by member match or by predicate, and the replacement can be done by simple replacement or by a transformer. <code>replace</code> returns the result of this operation.
 
 Other stuff
 -----------
