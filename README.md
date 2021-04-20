@@ -103,7 +103,7 @@ Where <code>start</code> is a <code>size_t</code> representing the first index o
 Replacing
 ---------
 
-Lists can be replaced, meaning selected elements can be interchanged with specified replacements. Finding the elements to replace can be done by simple match, by member match or by predicate, and the replacement can be done by simple replacement or by a transformer. <code>replace</code> returns the result of this operation.
+Lists can be replaced, meaning selected elements can be interchanged with specified replacements. Finding the elements to replace can be done by simple match, by member match or by predicate, and the replacement can be done by simple replacement or by a simple transformer (no arguments allowed). <code>replace</code> returns the result of this operation.
 
 Other stuff
 -----------
