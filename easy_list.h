@@ -529,7 +529,7 @@ namespace easy_list
         /// Shares ///
         bool shares(const _Mybase rhs) const
         {
-            return this->unify(rhs).size() > 0;
+            return this->disjoin(rhs).size() > 0;
         }
 
     };
