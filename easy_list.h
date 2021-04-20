@@ -46,20 +46,20 @@ namespace easy_list
 
         explicit list(const _Alloc& _Al) : _Mybase(_Al) {}
 
-        list(const _Mybase& _Right, const _Alloc& _Al = _Alloc()) : _Mybase(_Right, _Al) {}
-
         list(const size_t _Count, const _Type& _Val, const _Alloc& _Al = _Alloc()) : _Mybase(_Count, _Val, _Al) {}
 
         template <class _Iter, std::enable_if_t<std::_Is_iterator_v<_Iter>, bool> = true>
         list(_Iter _First, _Iter _Last, const _Alloc& _Al = _Alloc()) : _Mybase(_First, _Last, _Al) {}
 
-        list(list&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase((_Mybase&&)_Right, _Al) {}
-
-        list(_Mybase&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase(_Right, _Al) {}
-
         list(std::initializer_list<_Type> _Ilist, const _Alloc& _Al = _Alloc()) : _Mybase(_Ilist, _Al) {}
 
         list(const list& _Right, const _Alloc& _Al = _Alloc()) : _Mybase((const _Mybase&)_Right, _Al) {}
+
+        list(const _Mybase& _Right, const _Alloc& _Al = _Alloc()) : _Mybase(_Right, _Al) {}
+
+        list(list&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase((_Mybase&&)_Right, _Al) {}
+
+        list(_Mybase&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase(_Right, _Al) {}
 
         ~list() { }
 
@@ -72,8 +72,17 @@ namespace easy_list
             return _Mybase::operator=((const _Mybase&)rhs);
         }
 
+        list& operator=(const _Mybase& rhs) {
+            return _Mybase::operator=(rhs);
+        }
+
         list& operator=(list&& rhs) noexcept {
             _Mybase::operator=((_Mybase&&)rhs);
+            return *this;
+        }
+
+        list& operator=(_Mybase&& rhs) noexcept {
+            _Mybase::operator=(rhs);
             return *this;
         }
 
