@@ -71,11 +71,13 @@ namespace easy_list
         //////////////////////////
 
         list& operator=(const list& rhs) {
-            return _Mybase::operator=((const _Mybase&)rhs);
+            _Mybase::operator=((const _Mybase&)rhs);
+            return *this;
         }
 
         list& operator=(const _Mybase& rhs) {
-            return _Mybase::operator=(rhs);
+            _Mybase::operator=(rhs);
+            return *this;
         }
 
         list& operator=(list&& rhs) noexcept {
