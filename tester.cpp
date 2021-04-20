@@ -26,6 +26,10 @@ bool odder(const C& c1, const C& c2) { return !(c1.n % 2) && (c2.n % 2); }
 
 bool evener(const C& c1, const C& c2) { return (c1.n % 2) && !(c2.n % 2); }
 
+bool isEven(const C& c) {
+    return c.n % 2 == 0;
+}
+
 C plusN(const C& c, int n) { return C(c.get() + n); }
 C plusOne(const C& c) { return plusN(c, 1); }
 
@@ -35,14 +39,12 @@ int main()
     const list<C> l2 = list<C>({ C(0), C(2), C(4) });
     const list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    std::cout << l1.slice(0) << std::endl;
-    std::cout << l1.slice(1) << std::endl;
-    std::cout << l1.slice(2) << std::endl;
-    std::cout << l1.slice(3) << std::endl;
-    std::cout << l1.slice(1, 1) << std::endl;
-    std::cout << l1.slice(1, 2) << std::endl;
-    std::cout << l1.slice(0, 3) << std::endl;
-    std::cout << l1.slice(5, 10) << std::endl;
+    std::cout << l1.replace(C(10), C(0)) << std::endl;
+    std::cout << l1.replace(C(11), 1) << std::endl;
+    std::cout << l1.replace(C(12), 2, &C::n) << std::endl;
+    std::cout << l2.replace(C(13), 0, &C::get) << std::endl;
+    std::cout << l2.replace(C(14), 2, &C::getDiff, 2) << std::endl;
+    std::cout << l1.replace(C(15), &isEven) << std::endl;
 
     return 0;
 }

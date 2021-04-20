@@ -509,6 +509,111 @@ namespace easy_list
             return result;
         }
 
+
+        ///////////////
+        /// REPLACE ///
+        ///////////////
+
+        template <
+            typename _Replacer,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_convertible<_Replacer, _Type>,
+                    template_helpers::is_equatable_self<_Type>
+                >,
+                bool
+            > = true
+        >
+        [[nodiscard]] list replace(_Replacer replacement, const _Type& match) const
+        {
+            list result = list();
+            for (_Type elem : *this)
+            {
+                if (elem == match)
+                    result.push_back(replacement);
+                else
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        template <
+            typename _Replacer,
+            typename _MatchType,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_convertible<_Replacer, _Type>,
+                    std::negation<std::is_same<_Type, _MatchType>>,
+                    template_helpers::is_equatable<_Type, _MatchType>
+                >,
+                bool
+            > = true
+        >
+        [[nodiscard]] list replace(_Replacer replacement, const _MatchType& match) const
+        {
+            list result = list();
+            for (_Type elem : *this)
+            {
+                if (elem == match)
+                    result.push_back(replacement);
+                else
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        template <
+            typename _Replacer,
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_convertible<_Replacer, _Type>,
+                    std::negation<std::is_same<_Type, _Predicate>>,
+                    std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
+                    template_helpers::is_predicate<_Predicate, _Type>
+                >,
+                bool
+            > = true
+        >
+        [[nodiscard]] list replace(_Replacer replacement, const _Predicate& predicate) const
+        {
+            list result = list();
+            for (_Type elem : *this)
+            {
+                if (predicate(elem))
+                    result.push_back(replacement);
+                else
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        template <
+            typename _Replacer,
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_convertible<_Replacer, _Type>,
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
+            > = true
+        >
+        [[nodiscard]] list replace(_Replacer replacement, const _Result& match, const _Callable& member, const _Args&... args) const
+        {
+            list result = list();
+            for (_Type elem : *this)
+            {
+                if (std::invoke(member, elem, args...) == match)
+                    result.push_back(replacement);
+                else
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
         /// Disjoin ///
         [[nodiscard]] list disjoin(const _Mybase rhs) const
         {
