@@ -222,7 +222,7 @@ namespace easy_list
         template <
             typename _MatchType,
             std::enable_if_t<
-                template_helpers::is_equatable<const _Type&, const _MatchType&>,
+                template_helpers::is_equatable_v<const _Type&, const _MatchType&>,
                 bool
             >
             = true
@@ -365,25 +365,16 @@ namespace easy_list
         /// SELECTING ///
         /////////////////
 
-        template <typename = typename std::enable_if_t<template_helpers::is_equatable_self_v<_Type>, bool>>
-        [[nodiscard]] list select(const _Type& match) const
-        {
-            list sublist = list();
-            for (_Type elem : *this)
-            {
-                if (elem == match)
-                    sublist.push_back(elem);
-            }
-            return sublist;
-        }
-
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list equal to the provided match.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to search for.</param>
+        /// <returns>A sub-list containing all elements of this list equal to the provided match.</returns>
         template <
             typename _MatchType,
             std::enable_if_t<
-                std::conjunction_v<
-                    std::negation<std::is_same<_Type, _MatchType>>,
-                    template_helpers::is_equatable<_Type, _MatchType>
-                >,
+                template_helpers::is_equatable_v<_Type, _MatchType>,
                 bool
             >
             = true
@@ -399,11 +390,16 @@ namespace easy_list
             return sublist;
         }
 
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list equal to the provided match.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>A sub-list containing all elements of this list satisfying the given predicate.</returns>
         template <
             typename _Predicate,
             std::enable_if_t<
                 std::conjunction_v<
-                    std::negation<std::is_same<_Type, _Predicate>>,
                     std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
                     template_helpers::is_predicate<_Predicate, _Type>
                 >,
@@ -422,6 +418,14 @@ namespace easy_list
             return sublist;
         }
 
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list where the given member equals the provided match
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to match.</param>
+        /// <param name="member">A reference to the member variable or method to check, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>A sub-list containing all elements of this list where the given member equals the provided match.</returns>
         template <
             typename _Result,
             typename _Callable,
