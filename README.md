@@ -114,6 +114,6 @@ Similarly, <code>disjoin<code> returns a list containing exactly one instance of
 
 You can check if two lists share any elements with <code>shares</code>, which is equivalent to disjoining the vectors, and checking to see if the result is non-empty.
 
-You can concatenate two lists (or a list and a vector) with the + operator.
+You can concatenate two lists (or a list and a vector) with the + operator. As a shorthand for concatenating a list with a single item, you can simply concatenate an item.
 
 You can shuffle lists by simply calling <code>shuffle()</code>. No arguments required. For almost all purposes, you don't want to know anything about the RNG or the shuffle algorithm.
