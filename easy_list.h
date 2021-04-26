@@ -102,12 +102,33 @@ namespace easy_list
         }
 
         /// <summary>
+        /// Concatenates this list with a single item.
+        /// </summary>
+        /// <param name="rhs">The item to concatenate.</param>
+        /// <returns>The concatenated list.</returns>
+        list operator+(const _Type& rhs) const {
+            auto result = list(*this);
+            result.push_back(rhs);
+            return result;
+        }
+
+        /// <summary>
         /// Appends (concatenates) a list or vector on the end of the current list.
         /// </summary>
         /// <param name="rhs">The vector to append.</param>
         /// <returns>The list, after the append operation.</returns>
         list& operator+=(const _Mybase& rhs) {
             this->insert(this->end(), rhs.begin(), rhs.end());
+            return *this;
+        }
+
+        /// <summary>
+        /// Appends (concatenates) a single item on the end of the current list.
+        /// </summary>
+        /// <param name="rhs">The item to append.</param>
+        /// <returns>This list, after the append operation.</returns>
+        list& operator+=(const _Type& rhs) {
+            this->push_back(rhs);
             return *this;
         }
 

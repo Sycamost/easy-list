@@ -37,14 +37,12 @@ C plusOne(const C& c) { return plusN(c, 1); }
 int main()
 {
     const list<C> l1 = list<C>({ C(0), C(1), C(2) });
-    const list<C> l2 = list<C>({ C(0), C(2), C(4) });
+    list<C> l2 = list<C>({ C(0), C(2), C(4) });
     list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
 
-    std::wcout << l3.shuffle() << std::endl;
-    std::wcout << l3.shuffle() << std::endl;
-    std::wcout << l3.shuffle() << std::endl;
-    std::wcout << l3.shuffle() << std::endl;
-    std::wcout << l3.shuffle() << std::endl;
+    std::wcout << l1 + C(1) << std::endl;
+    l2 += C(10);
+    std::wcout << l2 << std::endl;
 
     return 0;
 }
