@@ -64,6 +64,8 @@ or by matching a specified value on a member:
     myList.select(match, &ObjectType::memberVariable)
     myList.select(match, &ObjectType::getValue, args...)
 
+The user can select all *but* specified members by calling <code>remove</code>, with like syntax to the above.
+
 Counting
 --------
 
