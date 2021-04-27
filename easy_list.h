@@ -334,6 +334,53 @@ namespace easy_list
         }
 
 
+        ///////////////////////
+        /// UNIFY & DISJOIN ///
+        ///////////////////////
+
+        /// <summary>
+        /// Makes a new list from the union of the elements of this list with the list or vector provided.
+        /// </summary>
+        /// <param name="rhs">The list or vector to unify with this one.</param>
+        /// <returns>A list containing one instance of every element occurring at least once in either list, in the order in which they first occur in the right-hand side, followed by the order in which they first occur in this list.</returns>
+        [[nodiscard]] list unify(const _Mybase rhs) const
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : *this + rhs)
+            {
+                if (!result.contains(elem))
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Makes a new list from the disjoint of the elements of this list with the list or vector provided.
+        /// </summary>
+        /// <param name="rhs">The list or vector to disjoin with this one.</param>
+        /// <returns>A list containing one instance of every element occurring at least once in both lists, in the order in which they first occur in the right-hand side.</returns>
+        [[nodiscard]] list disjoin(const _Mybase rhs) const
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : rhs)
+            {
+                if (!result.contains(elem) && this->contains(elem))
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Checks whether the two lists share any elements.
+        /// </summary>
+        /// <param name="rhs">The other list or vector.</param>
+        /// <returns>True if any element was contained in both, false otherwise.</returns>
+        bool shares(const _Mybase rhs) const
+        {
+            return this->disjoin(rhs).size() > 0;
+        }
+
+
         ///////////////
         /// SORTING ///
         ///////////////
@@ -1021,52 +1068,9 @@ namespace easy_list
             return result;
         }
 
-
-        ///////////////////////
-        /// UNIFY & DISJOIN ///
-        ///////////////////////
-
-        /// <summary>
-        /// Makes a new list from the union of the elements of this list with the list or vector provided.
-        /// </summary>
-        /// <param name="rhs">The list or vector to unify with this one.</param>
-        /// <returns>A list containing one instance of every element occurring at least once in either list, in the order in which they first occur in the right-hand side, followed by the order in which they first occur in this list.</returns>
-        [[nodiscard]] list unify(const _Mybase rhs) const
-        {
-            list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : *this + rhs)
-            {
-                if (!result.contains(elem))
-                    result.push_back(elem);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Makes a new list from the disjoint of the elements of this list with the list or vector provided.
-        /// </summary>
-        /// <param name="rhs">The list or vector to disjoin with this one.</param>
-        /// <returns>A list containing one instance of every element occurring at least once in both lists, in the order in which they first occur in the right-hand side.</returns>
-        [[nodiscard]] list disjoin(const _Mybase rhs) const
-        {
-            list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : rhs)
-            {
-                if (!result.contains(elem) && this->contains(elem))
-                    result.push_back(elem);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Checks whether the two lists share any elements.
-        /// </summary>
-        /// <param name="rhs">The other list or vector.</param>
-        /// <returns>True if any element was contained in both, false otherwise.</returns>
-        bool shares(const _Mybase rhs) const
-        {
-            return this->disjoin(rhs).size() > 0;
-        }
+        /////////////
+        /// SLICE ///
+        /////////////
 
         /// <summary>
         /// Makes a new list from a sub-string of elements of this one.
@@ -1097,6 +1101,10 @@ namespace easy_list
             *this = this->slice(start, length);
             return *this;
         }
+
+        ///////////////
+        /// SHUFFLE ///
+        ///////////////
 
         /// <summary>
         /// Randomises the order of elements in this list.
