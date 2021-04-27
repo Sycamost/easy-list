@@ -562,7 +562,7 @@ namespace easy_list
         /// </summary>
         /// <param name="index">The index to remove at.</param>
         /// <returns>The result of the remove operation.</returns>
-        [[nodiscard]] list removeAt(const size_t index)
+        [[nodiscard]] list removeAt(const size_t index) const
         {
             return this->slice(0, index) + this->slice(index + 1);
         }
@@ -572,7 +572,7 @@ namespace easy_list
         /// </summary>
         /// <param name="index">The index to remove at.</param>
         /// <returns>The result of the remove operation.</returns>
-        [[nodiscard]] list removeAt(const _Mybase::const_iterator iter)
+        [[nodiscard]] list removeAt(const _Mybase::const_iterator iter) const
         {
             return this->removeAt(std::distance(this->begin(), iter));
         }
