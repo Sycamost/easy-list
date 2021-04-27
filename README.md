@@ -131,3 +131,5 @@ You can check if two lists share any elements with <code>shares</code>, which is
 You can concatenate two lists (or a list and a vector) with the + operator. As a shorthand for concatenating a list with a single item, you can simply concatenate an item.
 
 You can shuffle lists by simply calling <code>shuffle()</code>. No arguments required. For almost all purposes, you don't want to know anything about the RNG or the shuffle algorithm.
+
+Anywhere where you pass an index to a new easy_list::list function, you can pass a negative value. Any negative value, -x, will be interpreted as the length of the list minus x.

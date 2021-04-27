@@ -562,8 +562,10 @@ namespace easy_list
         /// </summary>
         /// <param name="index">The index to remove at.</param>
         /// <returns>The result of the remove operation.</returns>
-        [[nodiscard]] list removeAt(const size_t index) const
+        [[nodiscard]] list removeAt(const long index) const
         {
+            if (index < 0)
+                return this->removeAt(this->size() + index);
             return this->slice(0, index) + this->slice(index + 1);
         }
 
@@ -1085,8 +1087,10 @@ namespace easy_list
         /// <param name="start">The element to start at.</param>
         /// <param name="length">The length of the string (unless it goes beyond the end of this list, in which case we only go to the end of this list).</param>
         /// <returns>The result of the slice.</returns>
-        list slice(const size_t start, const size_t length = -1) const
+        list slice(const size_t start, const long length = LONG_MAX) const
         {
+            if (length < 0)
+                return this->slice(start, this->size() + length);
             if (start >= this->size())
                 return list();
             list result = list();
@@ -1103,8 +1107,10 @@ namespace easy_list
         /// <param name="start">The element to start at.</param>
         /// <param name="length">The length of the string (unless it goes beyond the end of this list, in which case we only go to the end of this list).</param>
         /// <returns>This list after splicing.</returns>
-        list& splice(const size_t start, const size_t length = -1)
+        list& splice(const size_t start, const long length = LONG_MAX)
         {
+            if (length < 0)
+                return this->splice(start, this->size() - length);
             *this = this->slice(start, length);
             return *this;
         }
