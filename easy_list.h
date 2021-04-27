@@ -566,10 +566,10 @@ namespace easy_list
         {
             if (index < 0)
             {
-                long newLength = this->size() + length;
-                if (newLength < 0)
+                long newIndex = this->size() + index;
+                if (newIndex < 0)
                     return *this;
-                return this->removeAt(newLength);
+                return this->removeAt(newIndex);
             }
             return this->slice(0, index) + this->slice(index + 1);
         }
@@ -1092,10 +1092,25 @@ namespace easy_list
         /// <param name="start">The element to start at.</param>
         /// <param name="length">The length of the string (unless it goes beyond the end of this list, in which case we only go to the end of this list).</param>
         /// <returns>The result of the slice.</returns>
-        list slice(const size_t start, const long length = LONG_MAX) const
+        list slice(const long start = LONG_MAX, const long length = LONG_MAX) const
         {
+            if (start < 0)
+            {
+                long newStart = this->size() + start;
+                if (newStart < 0)
+                    return this->slice(0, length);
+                return this->slice(newStart, length);
+            }
+
             if (length < 0)
-                return this->slice(start, this->size() + length);
+            {
+                long newLength = this->size() + length - start;
+                if (newLength < 0)
+                    return this->slice(0, 0);
+                return this->slice(start, newLength);
+            }
+
+
             if (start >= this->size())
                 return list();
             list result = list();
