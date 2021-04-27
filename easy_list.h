@@ -572,7 +572,7 @@ namespace easy_list
         /// </summary>
         /// <param name="index">The index to remove at.</param>
         /// <returns>The result of the remove operation.</returns>
-        [[nodiscard]] list removeAt(const _Mybase::const_iterator iter) const
+        [[nodiscard]] list removeAt(const typename _Mybase::const_iterator iter) const
         {
             return this->removeAt(std::distance(this->begin(), iter));
         }
@@ -634,7 +634,7 @@ namespace easy_list
         >
         [[nodiscard]] list removeAll(const _Predicate predicate) const
         {
-            return this->select([match](_Type other) -> bool { return !predicate(other); });
+            return this->select([predicate](_Type other) -> bool { return !predicate(other); });
         }
 
         /// <summary>
@@ -681,7 +681,7 @@ namespace easy_list
         >
         [[nodiscard]] list removeAll(const _Result& match, const _Callable member, const _Args&... args) const
         {
-            return this->select([match](_Type other) -> bool { return std::invoke(member, other, args...) != match; });
+            return this->select([match, member, args...](_Type other) -> bool { return std::invoke(member, other, args...) != match; });
         }
 
         /// <summary>
