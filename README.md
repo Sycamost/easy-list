@@ -5,6 +5,7 @@ Makes a C++ class, <code>list</code> storing a list of arbitrary objects, with s
 * [sorting](#Sorting),
 * [iterating](#Iterating),
 * [selecting](#Selecting),
+* [removing](#Removing),
 * [counting](#Counting),
 * [transforming](#Transforming),
 * [slicing and splicing](#Slicing),
@@ -63,6 +64,19 @@ or by matching a specified value on a member:
 
     myList.select(match, &ObjectType::memberVariable)
     myList.select(match, &ObjectType::getValue, args...)
+
+The user can select all *but* specified members by calling <code>remove</code>, with like syntax to the above.
+
+Removing
+--------
+
+There are actually three kinds of removal operations:
+
+* <code>removeAt</code> simply removes the element at the specified index or iterator.
+
+* <code>removeFirst</code> is equivalent to finding an iterator with [<code>search</code>](#Searching) and calling <code>removeAt</code> with that iterator.
+
+* <code>removeAll</code> is equivalent to [<code>select</code>](#Selecting) with the negation of the given search criteria.
 
 Counting
 --------

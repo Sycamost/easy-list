@@ -334,6 +334,53 @@ namespace easy_list
         }
 
 
+        ///////////////////////
+        /// UNIFY & DISJOIN ///
+        ///////////////////////
+
+        /// <summary>
+        /// Makes a new list from the union of the elements of this list with the list or vector provided.
+        /// </summary>
+        /// <param name="rhs">The list or vector to unify with this one.</param>
+        /// <returns>A list containing one instance of every element occurring at least once in either list, in the order in which they first occur in the right-hand side, followed by the order in which they first occur in this list.</returns>
+        [[nodiscard]] list unify(const _Mybase rhs) const
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : *this + rhs)
+            {
+                if (!result.contains(elem))
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Makes a new list from the disjoint of the elements of this list with the list or vector provided.
+        /// </summary>
+        /// <param name="rhs">The list or vector to disjoin with this one.</param>
+        /// <returns>A list containing one instance of every element occurring at least once in both lists, in the order in which they first occur in the right-hand side.</returns>
+        [[nodiscard]] list disjoin(const _Mybase rhs) const
+        {
+            list<_Type, _Alloc> result = list<_Type, _Alloc>();
+            for (_Type elem : rhs)
+            {
+                if (!result.contains(elem) && this->contains(elem))
+                    result.push_back(elem);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Checks whether the two lists share any elements.
+        /// </summary>
+        /// <param name="rhs">The other list or vector.</param>
+        /// <returns>True if any element was contained in both, false otherwise.</returns>
+        bool shares(const _Mybase rhs) const
+        {
+            return this->disjoin(rhs).size() > 0;
+        }
+
+
         ///////////////
         /// SORTING ///
         ///////////////
@@ -503,6 +550,163 @@ namespace easy_list
                     sublist.push_back(elem);
             }
             return sublist;
+        }
+
+
+        ////////////////
+        /// REMOVING ///
+        ////////////////
+
+        /// <summary>
+        /// Removes the element at the given index (if any element exists there) and returns the result.
+        /// </summary>
+        /// <param name="index">The index to remove at.</param>
+        /// <returns>The result of the remove operation.</returns>
+        [[nodiscard]] list removeAt(const size_t index) const
+        {
+            return this->slice(0, index) + this->slice(index + 1);
+        }
+
+        /// <summary>
+        /// Removes the element at the given iterator (if any element exists there) and returns the result.
+        /// </summary>
+        /// <param name="index">The index to remove at.</param>
+        /// <returns>The result of the remove operation.</returns>
+        [[nodiscard]] list removeAt(const typename _Mybase::const_iterator iter) const
+        {
+            return this->removeAt(std::distance(this->begin(), iter));
+        }
+
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list not equal to the provided match.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to remove.</param>
+        /// <returns>A sub-list containing all elements of this list not equal to the provided match.</returns>
+        template <
+            typename _MatchType,
+            std::enable_if_t<
+                template_helpers::is_equatable_v<_Type, _MatchType>,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeAll(const _MatchType& match) const
+        {
+            return this->select([match](_Type other) -> bool { return other != match; });
+        }
+
+        /// <summary>
+        /// Removes the first match and returns the result.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to remove.</param>
+        /// <returns>A sub-list of this with the first occurrence of the match removed.</returns>
+        template <
+            typename _MatchType,
+            std::enable_if_t<
+                template_helpers::is_equatable_v<_Type, _MatchType>,
+                bool
+            >
+            = true
+        >
+            [[nodiscard]] list removeFirst(const _MatchType& match) const
+        {
+            return this->removeAt(this->search(match));
+        }
+
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list failing the given predicate.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>A sub-list containing all elements of this list failing the given predicate.</returns>
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
+                    template_helpers::is_predicate<_Predicate, _Type>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeAll(const _Predicate predicate) const
+        {
+            return this->select([predicate](_Type other) -> bool { return !predicate(other); });
+        }
+
+        /// <summary>
+        /// Removes the first element found satisfying the given predicate and returns the result.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>A sub-list of this with the first element satisfying the predicate removed.</returns>
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
+                    template_helpers::is_predicate<_Predicate, _Type>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeFirst(const _Predicate predicate) const
+        {
+            return this->removeAt(this->search(predicate));
+        }
+
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list where the given member doesn't equal the provided match
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to (not) match.</param>
+        /// <param name="member">A reference to the member variable or method to check, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>A sub-list containing all elements of this list where the given member doesn't equal the provided match.</returns>
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeAll(const _Result& match, const _Callable member, const _Args&... args) const
+        {
+            return this->select([match, member, args...](_Type other) -> bool { return std::invoke(member, other, args...) != match; });
+        }
+
+        /// <summary>
+        /// Removes the first element found whose specified members equals the specified match, and returns the result.
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to match.</param>
+        /// <param name="member">A reference to the member variable or method to check, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>A sub-list of this with the first element where the given member equals the given match removed.</returns>
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeFirst(const _Result& match, const _Callable member, const _Args&... args) const
+        {
+            return this->removeAt(this->search(match, member, args...));
         }
 
 
@@ -871,52 +1075,9 @@ namespace easy_list
             return result;
         }
 
-
-        ///////////////////////
-        /// UNIFY & DISJOIN ///
-        ///////////////////////
-
-        /// <summary>
-        /// Makes a new list from the union of the elements of this list with the list or vector provided.
-        /// </summary>
-        /// <param name="rhs">The list or vector to unify with this one.</param>
-        /// <returns>A list containing one instance of every element occurring at least once in either list, in the order in which they first occur in the right-hand side, followed by the order in which they first occur in this list.</returns>
-        [[nodiscard]] list unify(const _Mybase rhs) const
-        {
-            list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : *this + rhs)
-            {
-                if (!result.contains(elem))
-                    result.push_back(elem);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Makes a new list from the disjoint of the elements of this list with the list or vector provided.
-        /// </summary>
-        /// <param name="rhs">The list or vector to disjoin with this one.</param>
-        /// <returns>A list containing one instance of every element occurring at least once in both lists, in the order in which they first occur in the right-hand side.</returns>
-        [[nodiscard]] list disjoin(const _Mybase rhs) const
-        {
-            list<_Type, _Alloc> result = list<_Type, _Alloc>();
-            for (_Type elem : rhs)
-            {
-                if (!result.contains(elem) && this->contains(elem))
-                    result.push_back(elem);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Checks whether the two lists share any elements.
-        /// </summary>
-        /// <param name="rhs">The other list or vector.</param>
-        /// <returns>True if any element was contained in both, false otherwise.</returns>
-        bool shares(const _Mybase rhs) const
-        {
-            return this->disjoin(rhs).size() > 0;
-        }
+        /////////////
+        /// SLICE ///
+        /////////////
 
         /// <summary>
         /// Makes a new list from a sub-string of elements of this one.
@@ -947,6 +1108,10 @@ namespace easy_list
             *this = this->slice(start, length);
             return *this;
         }
+
+        ///////////////
+        /// SHUFFLE ///
+        ///////////////
 
         /// <summary>
         /// Randomises the order of elements in this list.
