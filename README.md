@@ -119,7 +119,7 @@ Replacing
 
 Lists can be replaced, meaning selected elements can be interchanged with specified replacements. Finding the elements to replace can be done by simple match, by member match or by predicate, and the replacement can be done by simple replacement or by a simple transformer (no arguments allowed). <code>replace</code> returns the result of this operation.
 
-Other stuff
+Miscellany
 -----------
 
 You can create a new list from one list and a vector with <code>unify</code> (for lack of being able to use the keyword <code>union</code>), where the new list contains exactly one of every element that occurs at least once in *either* of the two starting lists, in the order they first appear in the left list, followed by the order they first appear in the right list.
