@@ -565,7 +565,12 @@ namespace easy_list
         [[nodiscard]] list removeAt(const long index) const
         {
             if (index < 0)
-                return this->removeAt(this->size() + index);
+            {
+                long newLength = this->size() + length;
+                if (newLength < 0)
+                    return *this;
+                return this->removeAt(newLength);
+            }
             return this->slice(0, index) + this->slice(index + 1);
         }
 
@@ -1110,7 +1115,12 @@ namespace easy_list
         list& splice(const size_t start, const long length = LONG_MAX)
         {
             if (length < 0)
-                return this->splice(start, this->size() - length);
+            {
+                long newLength = this->size() + length;
+                if (newLength < 0)
+                    return this->splice(start, 0);
+                return this->splice(start, newLength);
+            }
             *this = this->slice(start, length);
             return *this;
         }
