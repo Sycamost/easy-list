@@ -568,6 +568,16 @@ namespace easy_list
         }
 
         /// <summary>
+        /// Removes the element at the given iterator (if any element exists there) and returns the result.
+        /// </summary>
+        /// <param name="index">The index to remove at.</param>
+        /// <returns>The result of the remove operation.</returns>
+        [[nodiscard]] list removeAt(const _Mybase::const_iterator iter)
+        {
+            return this->removeAt(std::distance(this->begin(), iter));
+        }
+
+        /// <summary>
         /// Selects a sub-list containing all elements of this list not equal to the provided match.
         /// </summary>
         /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
@@ -602,8 +612,7 @@ namespace easy_list
         >
             [[nodiscard]] list removeFirst(const _MatchType& match) const
         {
-            _Mybase::const_iterator iter = this->search(match);
-            return this->removeAt(std::distance(this->begin(), iter));
+            return this->removeAt(this->search(match));
         }
 
         /// <summary>
@@ -647,8 +656,7 @@ namespace easy_list
         >
         [[nodiscard]] list removeFirst(const _Predicate predicate) const
         {
-            _Mybase::const_iterator iter = this->search(predicate);
-            return this->removeAt(std::distance(this->begin(), iter));
+            return this->removeAt(this->search(predicate));
         }
 
         /// <summary>
@@ -698,8 +706,7 @@ namespace easy_list
         >
         [[nodiscard]] list removeFirst(const _Result& match, const _Callable member, const _Args&... args) const
         {
-            _Mybase::const_iterator iter = this->search(predicate);
-            return this->removeAt(std::distance(this->begin(), iter));
+            return this->removeAt(this->search(match, member, args...));
         }
 
 
