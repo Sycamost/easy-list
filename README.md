@@ -119,15 +119,17 @@ Replacing
 
 Lists can be replaced, meaning selected elements can be interchanged with specified replacements. Finding the elements to replace can be done by simple match, by member match or by predicate, and the replacement can be done by simple replacement or by a simple transformer (no arguments allowed). <code>replace</code> returns the result of this operation.
 
-Other stuff
+Miscellany
 -----------
 
 You can create a new list from one list and a vector with <code>unify</code> (for lack of being able to use the keyword <code>union</code>), where the new list contains exactly one of every element that occurs at least once in *either* of the two starting lists, in the order they first appear in the left list, followed by the order they first appear in the right list.
 
-Similarly, <code>disjoin<code> returns a list containing exactly one instance of every element that occurs at least once in *both* lists, in the order in which they first appear in the right-hand list.
+Similarly, <code>disjoin</code> returns a list containing exactly one instance of every element that occurs at least once in *both* lists, in the order in which they first appear in the right-hand list.
 
 You can check if two lists share any elements with <code>shares</code>, which is equivalent to disjoining the vectors, and checking to see if the result is non-empty.
 
 You can concatenate two lists (or a list and a vector) with the + operator. As a shorthand for concatenating a list with a single item, you can simply concatenate an item.
 
 You can shuffle lists by simply calling <code>shuffle()</code>. No arguments required. For almost all purposes, you don't want to know anything about the RNG or the shuffle algorithm.
+
+Anywhere where you pass an index to a new easy_list::list function, you can pass a negative value. Any negative value, -x, will be interpreted as the length of the list minus x.
