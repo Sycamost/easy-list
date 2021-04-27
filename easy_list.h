@@ -507,6 +507,156 @@ namespace easy_list
 
 
         ////////////////
+        /// REMOVING ///
+        ////////////////
+
+        /// <summary>
+        /// Removes the element at the given index (if any element exists there) and returns the result.
+        /// </summary>
+        /// <param name="index">The index to remove at.</param>
+        /// <returns>The result of the remove operation.</returns>
+        [[nodiscard]] list removeAt(const size_t index)
+        {
+            return this->slice(0, index) + this->slice(index + 1);
+        }
+
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list not equal to the provided match.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to remove.</param>
+        /// <returns>A sub-list containing all elements of this list not equal to the provided match.</returns>
+        template <
+            typename _MatchType,
+            std::enable_if_t<
+                template_helpers::is_equatable_v<_Type, _MatchType>,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeAll(const _MatchType& match) const
+        {
+            return this->select([match](_Type other) -> bool { return other != match; });
+        }
+
+        /// <summary>
+        /// Removes the first match and returns the result.
+        /// </summary>
+        /// <typeparam name="_MatchType">A type equatable to the type of the elements of this list.</typeparam>
+        /// <param name="match">The element to remove.</param>
+        /// <returns>A sub-list of this with the first occurrence of the match removed.</returns>
+        template <
+            typename _MatchType,
+            std::enable_if_t<
+                template_helpers::is_equatable_v<_Type, _MatchType>,
+                bool
+            >
+            = true
+        >
+            [[nodiscard]] list removeFirst(const _MatchType& match) const
+        {
+            _Mybase::const_iterator iter = this->search(match);
+            return this->removeAt(std::distance(this->begin(), iter));
+        }
+
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list failing the given predicate.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>A sub-list containing all elements of this list failing the given predicate.</returns>
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
+                    template_helpers::is_predicate<_Predicate, _Type>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeAll(const _Predicate predicate) const
+        {
+            return this->select([match](_Type other) -> bool { return !predicate(other); });
+        }
+
+        /// <summary>
+        /// Removes the first element found satisfying the given predicate and returns the result.
+        /// </summary>
+        /// <typeparam name="_Predicate">A callable object, taking a element type as an argument and returning a bool.</typeparam>
+        /// <param name="predicate">The predicate to check against.</param>
+        /// <returns>A sub-list of this with the first element satisfying the predicate removed.</returns>
+        template <
+            typename _Predicate,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::negation<template_helpers::is_equatable<_Type, _Predicate>>,
+                    template_helpers::is_predicate<_Predicate, _Type>
+                >,
+                bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeFirst(const _Predicate predicate) const
+        {
+            _Mybase::const_iterator iter = this->search(predicate);
+            return this->removeAt(std::distance(this->begin(), iter));
+        }
+
+        /// <summary>
+        /// Selects a sub-list containing all elements of this list where the given member doesn't equal the provided match
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to (not) match.</param>
+        /// <param name="member">A reference to the member variable or method to check, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>A sub-list containing all elements of this list where the given member doesn't equal the provided match.</returns>
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeAll(const _Result& match, const _Callable member, const _Args&... args) const
+        {
+            return this->select([match](_Type other) -> bool { return std::invoke(member, other, args...) != match; });
+        }
+
+        /// <summary>
+        /// Removes the first element found whose specified members equals the specified match, and returns the result.
+        /// </summary>
+        /// <typeparam name="_Result">The type of the member variable, or return type of the member method, as applicable.</typeparam>
+        /// <param name="match">The value to match.</param>
+        /// <param name="member">A reference to the member variable or method to check, as applicable.</param>
+        /// <param name="...args">The arguments to pass to the member method, if applicable.</param>
+        /// <returns>A sub-list of this with the first element where the given member equals the given match removed.</returns>
+        template <
+            typename _Result,
+            typename _Callable,
+            typename... _Args,
+            std::enable_if_t<
+                std::conjunction_v<
+                    std::is_member_pointer<_Callable>,
+                    std::is_invocable_r<_Result, decltype(std::declval<_Callable>()), _Type, _Args...>
+                >, bool
+            >
+            = true
+        >
+        [[nodiscard]] list removeFirst(const _Result& match, const _Callable member, const _Args&... args) const
+        {
+            _Mybase::const_iterator iter = this->search(predicate);
+            return this->removeAt(std::distance(this->begin(), iter));
+        }
+
+
+        ////////////////
         /// COUNTING ///
         ////////////////
 
