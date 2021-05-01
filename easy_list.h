@@ -1164,6 +1164,46 @@ namespace easy_list
             return *this;
         }
 
+
+        ///////////////
+        /// REVERSE ///
+        ///////////////
+
+        /// <summary>
+        /// Reverses the order of elements in this list, and returns the result.
+        /// </summary>
+        [[nodiscard]] list reverse() const
+        {
+            list result = list();
+            for (int i = (int)this->size() - 1; i >= 0; i--)
+                result.push_back((*this)[i]);
+            return result;
+        }
+
+
+        /////////////////
+        /// POWER SET ///
+        /////////////////
+
+    private:
+
+    public:
+        list<list> powerSet() const
+        {
+            // Remove duplicates
+            list set = this->disjoin(*this);
+
+            // Start off with the empty set
+            list<list> result = list<list>({ {} });
+
+            // Generate the power set iteratively - on each iteration,
+            // append a duplicate with the next element in this list prepended to each element in the result
+            for (auto elem : set)
+                result += result.transform<list>([elem](list li) -> list { return list({ elem }) + li; });
+
+            return result;
+        }
+
     };
 }
 

@@ -37,8 +37,6 @@ C plusOne(const C& c) { return plusN(c, 1); }
 int main()
 {
     const list<char> l1 = { 'H', 'e', 'l', 'l', 'o' };
-    list<wchar_t> l2 = { L'w', L'o', L'r', L'l', L'd', L'!' };
-    std::cout << l1.toString() << " ";
-    std::wcout << l2.toString() << "\n";
+    std::cout << l1.powerSet() << "\n";
     return 0;
 }
