@@ -188,6 +188,16 @@ namespace easy_list
         }
 
 
+        ///////////////////
+        /// CONVERSIONS ///
+        ///////////////////
+
+        std::basic_string<_Type, std::char_traits<_Type>, _Alloc> toString() const
+        {
+            return std::basic_string<_Type, std::char_traits<_Type>, _Alloc>(this->begin(), this->end());
+        }
+
+
         /////////////////
         /// SEARCHING ///
         /////////////////
