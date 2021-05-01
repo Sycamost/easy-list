@@ -37,6 +37,6 @@ C plusOne(const C& c) { return plusN(c, 1); }
 int main()
 {
     const list<char> l1 = { 'H', 'e', 'l', 'l', 'o' };
-    std::cout << l1.powerSet() << "\n";
+    std::cout << l1.substrings() << "\n";
     return 0;
 }
