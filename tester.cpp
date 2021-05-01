@@ -36,7 +36,8 @@ C plusOne(const C& c) { return plusN(c, 1); }
 
 int main()
 {
-    const list<char> l1 = { 'H', 'e', 'l', 'l', 'o' };
-    std::cout << l1.substrings() << "\n";
+    std::wstring wstr = L"Hello world!";
+    const list<wchar_t> l1(wstr);
+    std::wcout << l1.toString() << "\n";
     return 0;
 }

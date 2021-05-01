@@ -24,6 +24,7 @@ namespace easy_list
     {
     public:
         using _Mybase = std::vector<_Type>;
+        template <typename _Traits> using _String = std::basic_string<_Type, _Traits, _Alloc>;
         using value_type = _Type;
         using allocator_type = typename _Mybase::allocator_type;
         using size_type = typename _Mybase::size_type;
@@ -56,12 +57,12 @@ namespace easy_list
         list(std::initializer_list<_Type> _Ilist, const _Alloc& _Al = _Alloc()) : _Mybase(_Ilist, _Al) {}
 
         list(const list& _Right, const _Alloc& _Al = _Alloc()) : _Mybase((const _Mybase&)_Right, _Al) {}
-
         list(const _Mybase& _Right, const _Alloc& _Al = _Alloc()) : _Mybase(_Right, _Al) {}
+        template<typename _Traits> list(const _String<_Traits>& _Right, const _Alloc& _Al = _Alloc()) : _Mybase(_Right.begin(), _Right.end(), _Al) {}
 
         list(list&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase((_Mybase&&)_Right, _Al) {}
-
         list(_Mybase&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase(_Right, _Al) {}
+        template<typename _Traits> list(_String<_Traits>&& _Right, const _Alloc& _Al = _Alloc()) noexcept : _Mybase(_Right.begin(), _Right.end(), _Al) {}
 
         ~list() { }
 
@@ -74,20 +75,26 @@ namespace easy_list
             _Mybase::operator=((const _Mybase&)rhs);
             return *this;
         }
-
         list& operator=(const _Mybase& rhs) {
             _Mybase::operator=(rhs);
             return *this;
+        }
+        template<typename _Traits>
+        list& operator=(const _String<_Traits>& rhs) {
+            return operator=(list(rhs));
         }
 
         list& operator=(list&& rhs) noexcept {
             _Mybase::operator=((_Mybase&&)rhs);
             return *this;
         }
-
         list& operator=(_Mybase&& rhs) noexcept {
             _Mybase::operator=(rhs);
             return *this;
+        }
+        template<typename _Traits>
+        list& operator=(_String<_Traits>&& rhs) {
+            return operator=(list(rhs));
         }
 
         /// <summary>
@@ -1161,7 +1168,7 @@ namespace easy_list
         /// <summary>
         /// Returns a list of all unique substrings of this list of the given length.
         /// </summary>
-        list<list> substrings(const long long length) const
+        list<list> substrings(const size_t length) const
         {
             if (length < 0)
             {
@@ -1171,9 +1178,12 @@ namespace easy_list
                 return substrings(newLength);
             }
 
+            if (length > this->size())
+                return list<list>({ {} });
+
             list<list> result = list<list>();
             for (size_t i = 0; i <= this->size() - length; i++)
-                result.push_back(this->slice(i, length));
+                result.push_back(this->slice(i, (long)length));
 
             // Remove duplicates before returning
             return result.removeDuplicates();
