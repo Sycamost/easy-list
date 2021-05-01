@@ -1150,6 +1150,38 @@ namespace easy_list
             return *this;
         }
 
+        /// <summary>
+        /// Returns a list of all unique substrings of this list of the given length.
+        /// </summary>
+        list<list> substrings(const long long length) const
+        {
+            if (length < 0)
+            {
+                auto newLength = this->size() + length;
+                if (newLength < 0)
+                    return list<list>();
+                return substrings(newLength);
+            }
+
+            list<list> result = list<list>();
+            for (size_t i = 0; i <= this->size() - length; i++)
+                result.push_back(this->slice(i, length));
+
+            // Remove duplicates before returning
+            return result.disjoin(result);
+        }
+
+        /// <summary>
+        /// Returns a list of all unique substrings of this list.
+        /// </summary>
+        list<list> substrings() const
+        {
+            list<list> result = list<list>();
+            for (size_t length = 0; length <= this->size(); length++)
+                result += substrings(length);
+            return result;
+        }
+
         ///////////////
         /// SHUFFLE ///
         ///////////////

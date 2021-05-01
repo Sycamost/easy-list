@@ -114,6 +114,8 @@ Lists can be sliced. This means selecting a specified sub-string of elements fro
    
 Where <code>start</code> is a <code>size_t</code> representing the first index of the sub-string and <code>length</code> is the length of the sub-string. To also assign the result to the list on which it was called, use <code>splice</code>.
 
+You can also get a list of all possible sub-strings by calling <code>substrings()</code>, or of all possible sub-strings of a given length with <code>substrings(int length)</code>.
+
 Replacing
 ---------
 
