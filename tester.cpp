@@ -36,14 +36,9 @@ C plusOne(const C& c) { return plusN(c, 1); }
 
 int main()
 {
-    const list<C> l1 = list<C>({ C(0), C(1), C(1), C(2) });
-    list<C> l2 = list<C>({ C(0), C(2), C(4) });
-    list<C> l3 = list<C>({ C(-3), C(-1), C(1) });
-
-    std::cout << l1.removeFirst(1) << "\t" << l1.removeAll(1) << "\n";
-    std::cout << l1.removeFirst(C(1)) << "\t" << l1.removeAll(C(1)) << "\n";
-    std::cout << l1.removeFirst(isEven) << "\t" << l1.removeAll(isEven) << "\n";
-    std::cout << l1.removeFirst(1, &C::n) << "\t" << l1.removeAll(1, &C::n) << "\n";
-    std::cout << l1.removeFirst(1, &C::getDiff, 1) << "\t" << l1.removeAll(1, &C::getDiff, 1) << "\n";
+    const list<char> l1 = { 'H', 'e', 'l', 'l', 'o' };
+    list<wchar_t> l2 = { L'w', L'o', L'r', L'l', L'd', L'!' };
+    std::cout << l1.toString() << " ";
+    std::wcout << l2.toString() << "\n";
     return 0;
 }
