@@ -381,6 +381,14 @@ namespace easy_list
         }
 
         /// <summary>
+        /// Returns this list with all duplicates removed.
+        /// </summary>
+        [[nodiscard]] list removeDuplicates() const
+        {
+            return this->disjoin(*this);
+        }
+
+        /// <summary>
         /// Checks whether the two lists share any elements.
         /// </summary>
         /// <param name="rhs">The other list or vector.</param>
@@ -1168,7 +1176,7 @@ namespace easy_list
                 result.push_back(this->slice(i, length));
 
             // Remove duplicates before returning
-            return result.disjoin(result);
+            return result.removeDuplicates();
         }
 
         /// <summary>
@@ -1223,7 +1231,7 @@ namespace easy_list
         list<list> powerSet() const
         {
             // Remove duplicates
-            list set = this->disjoin(*this);
+            list set = this->removeDuplicates();
 
             // Start off with the empty set
             list<list> result = list<list>({ {} });

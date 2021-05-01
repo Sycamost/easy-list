@@ -128,6 +128,8 @@ You can create a new list from one list and a vector with <code>unify</code> (fo
 
 Similarly, <code>disjoin</code> returns a list containing exactly one instance of every element that occurs at least once in *both* lists, in the order in which they first appear in the right-hand list.
 
+All duplicates can be removed from a list with <code>removeDuplicates()</code>. Behaviour is equivalent to disjoining a list with itself.
+
 You can check if two lists share any elements with <code>shares</code>, which is equivalent to disjoining the vectors, and checking to see if the result is non-empty.
 
 You can concatenate two lists (or a list and a vector) with the + operator. As a shorthand for concatenating a list with a single item, you can simply concatenate an item.
