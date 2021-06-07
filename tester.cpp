@@ -36,8 +36,7 @@ C plusOne(const C& c) { return plusN(c, 1); }
 
 int main()
 {
-    std::wstring wstr = L"Hello world!";
-    const list<wchar_t> l1(wstr);
-    std::wcout << l1.toString() << "\n";
+    const list<int> l1{ 10, 5, -3, 0, 11, 5 };
+    std::cout << l1.max() << " " << l1.min() << "\n";
     return 0;
 }

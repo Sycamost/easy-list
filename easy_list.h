@@ -1235,9 +1235,6 @@ namespace easy_list
         /// POWER SET ///
         /////////////////
 
-    private:
-
-    public:
         list<list> powerSet() const
         {
             // Remove duplicates
@@ -1252,6 +1249,53 @@ namespace easy_list
                 result += result.transform<list>([elem](list li) -> list { return list({ elem }) + li; });
 
             return result;
+        }
+
+
+        ///////////////
+        /// MIN/MAX ///
+        ///////////////
+        
+        /// <summary>
+        /// Finds the maximum under the given comparison.
+        /// </summary>
+        /// <typeparam name="_Compare">A comparison object type.</typeparam>
+        /// <param name="comparer">The comparison function.</param>
+        /// <returns>The greatest element in the list, if the comparison ordering is linear (otherwise, the return value is not defined).</returns>
+        template <typename _Compare, std::enable_if_t<template_helpers::is_comparison_v<_Compare, _Type>, bool> = true>
+        [[nodiscard]] _Type max(const _Compare comparer) const
+        {
+            return *std::max_element(this->begin(), this->end(), template_helpers::cast_static_comparison<_Compare, _Type>(comparer));
+        }
+
+        /// <summary>
+        /// Finds the maximum under a default comparison.
+        /// </summary>
+        /// <returns>The greatest element in the list, if the comparison ordering is linear (otherwise, the return value is not defined).</returns>
+        [[nodiscard]] _Type max() const
+        {
+            return *std::max_element(this->begin(), this->end());
+        }
+
+        /// <summary>
+        /// Finds the minimum under the given comparison.
+        /// </summary>
+        /// <typeparam name="_Compare">A comparison object type.</typeparam>
+        /// <param name="comparer">The comparison function.</param>
+        /// <returns>The least element in the list, if the comparison ordering is linear (otherwise, the return value is not defined).</returns>
+        template <typename _Compare, std::enable_if_t<template_helpers::is_comparison_v<_Compare, _Type>, bool> = true>
+        [[nodiscard]] _Type min(const _Compare comparer) const
+        {
+            return *std::min_element(this->begin(), this->end(), template_helpers::cast_static_comparison<_Compare, _Type>(comparer));
+        }
+
+        /// <summary>
+        /// Finds the minimum under a default comparison.
+        /// </summary>
+        /// <returns>The least element in the list, if the comparison ordering is linear (otherwise, the return value is not defined).</returns>
+        [[nodiscard]] _Type min() const
+        {
+            return *std::min_element(this->begin(), this->end());
         }
 
     };

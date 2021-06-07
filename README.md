@@ -141,3 +141,5 @@ Anywhere where you pass an index to a new easy_list::list function, you can pass
 You can reverse the order of elements in a list with <code>reverse()</code>.
 
 You can turn any list into a list of the power set of the elements of that list with <code>powerSet()</code>.
+
+You can find the min or max of a list, You may supply your own ordering function - if you don't, the < and > operators will be used if they are defined; and if not, they are ordered by hash code.
