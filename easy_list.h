@@ -104,7 +104,7 @@ namespace easy_list
         /// <returns>The concatenated list.</returns>
         list operator+(const _Mybase& rhs) const {
             list result = list(*this);
-            result.insert(result.end(), rhs.begin(), rhs.end());
+            for (_Type elem : rhs) result.push_back(elem);
             return result;
         }
 
